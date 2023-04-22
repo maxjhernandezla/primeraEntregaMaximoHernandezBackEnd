@@ -4,7 +4,7 @@ import CartManager from "../managers/CartManager.js";
 
 const router = Router();
 const productManager = new ProductManager("./src/files/Products.json");
-const cartManager = new CartManager('./src/files/Carts.json')
+const cartManager = new CartManager("./src/files/Carts.json");
 
 router.get("/", async (req, res) => {
   const products = await productManager.getProducts();
@@ -37,6 +37,8 @@ router.post("/", async (req, res) => {
   }
 
   const result = await productManager.addProduct(product);
+  const io = req.app.get("socketio");
+  io.emit("showProducts", await productManager.getProducts());
   return res.send({ status: "success", product });
 });
 
@@ -56,6 +58,8 @@ router.delete("/:pid", async (req, res) => {
   if (!result) {
     return res.status(404).send({ error: "product not found" });
   }
+  const io = req.app.get("socketio");
+  io.emit("showProducts", await productManager.getProducts());
   return res.send({ status: "success", messagge: "product deleted" });
 });
 
