@@ -1,6 +1,19 @@
-<div id="container">
 
+<div class="generalContainer">
+  <h1>Productos en tiempo real</h1>
+  <form id="form">
+    <input type="text" placeholder="title" id="form-title">
+    <input type="text" placeholder="description" id="form-description">
+    <input type="text" placeholder="price" id="form-price">
+    <input type="text" placeholder="stock" id="form-stock">
+    <input type="text" placeholder="code" id="form-code">
+    <input type="text" placeholder="category" id="form-category">
+    <button id="form-btn" type="submit">Ingresar producto</button>
+  </form>
+    <div id="productContainer">
+        
+    </div>
+  </div>
 </div>
-
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realTimeProducts.js"></script>

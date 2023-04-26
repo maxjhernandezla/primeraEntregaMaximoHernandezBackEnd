@@ -21,6 +21,7 @@ export default class ProductManager {
 
   addProduct = async (product) => {
     try {
+      product.status = true
       const products = await this.getProducts();
       if (products.length === 0) {
         product.id = 1;

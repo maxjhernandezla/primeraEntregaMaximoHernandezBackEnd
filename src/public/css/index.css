@@ -1,0 +1,24 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: lightgray;
+}
+
+.generalContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+.productContainer {
+    border: 1px black solid;
+    padding: 20px;
+    margin: 10px;
+}
+
+li {
+    text-decoration: none;
+    list-style: none;
+}
