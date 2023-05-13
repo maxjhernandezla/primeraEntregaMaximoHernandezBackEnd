@@ -1,11 +1,11 @@
 import { Router } from "express";
-import CartManager from "../managers/CartManager.js";
-import ProductManager from "../managers/ProductManager.js";
+import ProductManager from "../dao/managers/fileManagers/ProductManager.js";
+import CartManager from "../dao/managers/fileManagers/CartManager.js";
 
 const router = Router();
 
-const productManager = new ProductManager("./src/files/Products.json");
-const cartManager = new CartManager("./src/files/Carts.json");
+const productManager = new ProductManager("./src/dao/files/Products.json");
+const cartManager = new CartManager("./src/dao/files/Carts.json");
 
 router.get("/", async (req, res) => {
   const result = await cartManager.getCarts();
@@ -34,15 +34,14 @@ router.post("/:cid/products/:pid", async (req, res) => {
   const product = { id: productId };
   const cart = await cartManager.getCartById(cartId);
   const productExist = await productManager.getProductById(productId);
-  if(!productExist) {
-    return res.status(404).send({error: 'product not found'})
+  if (!productExist) {
+    return res.status(404).send({ error: "product not found" });
   }
-  if(!cart) {
-    return res.status(404).send({error: 'cart not found'})
+  if (!cart) {
+    return res.status(404).send({ error: "cart not found" });
   }
   const result = await cartManager.addProductInCart(cart, product);
   res.send({ status: "success", result });
-  
 });
 
 // if (!productId) {

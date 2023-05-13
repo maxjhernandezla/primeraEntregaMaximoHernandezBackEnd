@@ -1,0 +1,22 @@
+[
+	{
+		"title": "Producto 2",
+		"description": "Descripcion 2",
+		"price": "200",
+		"stock": "20",
+		"code": "aaa222",
+		"category": "",
+		"status": true,
+		"id": 2
+	},
+	{
+		"title": "Producto 3",
+		"description": "Descripcion 3",
+		"price": "300",
+		"stock": "30",
+		"code": "aaa333",
+		"category": "Producto",
+		"status": true,
+		"id": 3
+	}
+]
