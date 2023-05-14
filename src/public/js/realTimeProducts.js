@@ -25,6 +25,7 @@ form.addEventListener("submit", (e) => {
     stock: stock.value,
     code: code.value,
     category: category.value,
+    status: true,
   };
   socket.emit("addProduct", newProduct);
   title.value = "";
@@ -37,7 +38,6 @@ form.addEventListener("submit", (e) => {
 
 socket.on("showProducts", (data) => {
   container.innerHTML = ``;
-
   data.forEach((prod) => {
     container.innerHTML += `
         <div class='productContainer'>
@@ -49,17 +49,15 @@ socket.on("showProducts", (data) => {
                 <li>Estado: ${prod.status}</li>
                 <li>Stock: ${prod.stock}</li>
                 <li>Categoría: ${prod.category}</li>
-                <li>Id: ${prod.id}</li>
+                <li>Id: ${prod._id}</li>
             </ul>
-            <button class='btn' onclick = 'getId(${prod.id})' id='delete-btn-${prod.id}' value='${prod.id}'>Delete</button>
+            <button class='btn' onclick ='getId(${prod._id})' id='delete-btn-${prod._id}' value='${prod._id}'>Delete</button>
         </div>
         `;
+  });
+});
 
-      });
-    });
-
-    function getId(id) {
-      socket.emit('deleteProduct', id)
-    }
-    
-    
+function getId(_id) {
+  console.log(_id);
+  socket.emit("deleteProduct", _id);
+}
