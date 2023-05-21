@@ -5,8 +5,33 @@ export default class Products {
     console.log("Working products whith DB");
   }
 
-  getAll = async () => {
-    const products = await productModel.find().lean();
+  getAll = async ({ limit, page, sort, category, status }) => {
+    if (!limit) {
+      limit = 10;
+    }
+
+    if (!page) {
+      page = 1;
+    }
+
+    let options = { limit, page };
+
+    if (sort) {
+      options.sort = { price: sort };
+    }
+
+    let queryObject = {};
+
+    if (category) {
+      queryObject.category = category;
+    }
+
+    if (status) {
+      queryObject.status = status;
+    }
+
+    const products = await productModel.paginate(queryObject, options);
+
     return products;
   };
 

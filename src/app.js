@@ -3,12 +3,13 @@ import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import messagesRouter from "./routes/messages.router.js";
+import productModel from "./dao/models/products.model.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import ProductManager from "./dao/managers/dbManagers/productsManager.js";
 import MessageManager from "./dao/managers/dbManagers/messagesManager.js";
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const app = express();
 app.use(express.json());
@@ -30,7 +31,7 @@ try {
   await mongoose.connect(
     "mongodb+srv://maximojhernandezla:Iru151220@cluster0mh.tlhs7mz.mongodb.net/ecommerce?retryWrites=true&w=majority"
   );
-  console.log("DB running");
+  await console.log("DB running");
 } catch (error) {
   console.log(error);
 }

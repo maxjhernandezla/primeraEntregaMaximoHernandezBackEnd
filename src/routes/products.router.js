@@ -5,11 +5,20 @@ const router = Router();
 const productManager = new ProductManager();
 
 router.get("/", async (req, res) => {
+  const { limit, page, sort, category, status } = req.query;
+  console.log(limit, page, sort, category, status);
   try {
-    const products = await productManager.getAll();
+    const products = await productManager.getAll({
+      limit,
+      page,
+      sort,
+      category,
+      status,
+    });
     res.send({ status: "success", payload: products });
   } catch (error) {
     res.status(500).send({ status: "error", error });
+    console.log(error);
   }
 });
 

@@ -38,6 +38,7 @@ form.addEventListener("submit", (e) => {
 
 socket.on("showProducts", (data) => {
   container.innerHTML = ``;
+
   data.forEach((prod) => {
     container.innerHTML += `
         <div class='productContainer'>
@@ -57,7 +58,7 @@ socket.on("showProducts", (data) => {
   });
 });
 
-function getId(_id) {
-  console.log(_id);
-  socket.emit("deleteProduct", _id);
+function getId(id) {
+  console.log(id);
+  socket.emit("deleteProduct", id);
 }
