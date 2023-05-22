@@ -14,10 +14,14 @@ export default class Products {
       page = 1;
     }
 
-    let options = { limit, page };
+    let options = { lean: true, limit, page };
 
-    if (sort) {
-      options.sort = { price: sort };
+    if (sort === "asc") {
+      options.sort = { price: 1 };
+    } else if (sort === "desc") {
+      options.sort = { price: -1 };
+    } else {
+      options.sort = {};
     }
 
     let queryObject = {};
@@ -36,7 +40,7 @@ export default class Products {
   };
 
   getById = async (pid) => {
-    const productById = await productModel.find({ _id: pid });
+    const productById = await productModel.findOne({ _id: pid }).lean();
     return productById;
   };
 

@@ -11,7 +11,7 @@ export default class Cart {
   };
 
   getById = async (cid) => {
-    const cart = await cartModel.findOne({ _id: cid });
+    const cart = await cartModel.findOne({ _id: cid }).lean();
     return cart;
   };
 
@@ -24,8 +24,9 @@ export default class Cart {
     const cart = await this.getById(cid);
     const product = await productModel.findById(pid);
     const productInCart = cart.products.findIndex(
-      (p) => p.product.toString() === pid.toString()
+      (p) => p.product._id.toString() === pid.toString()
     );
+    console.log(productInCart);
     if (productInCart === -1) {
       cart.products.push({
         product: product._id,
@@ -53,8 +54,9 @@ export default class Cart {
   deleteProductInCart = async (cid, pid) => {
     const cart = await this.getById(cid);
     const productInCart = cart.products.findIndex(
-      (p) => p.product.toString() === pid.toString()
+      (p) => p.product._id.toString() === pid.toString()
     );
+    console.log(productInCart);
     if (productInCart !== -1) {
       cart.products.splice(productInCart, 1);
     }

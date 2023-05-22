@@ -1,0 +1,28 @@
+<div>
+  <div class="generalContainer">
+    {{#each products}}
+      <div class="productContainer">
+        <div class="pFront">
+          <h3>{{this.title}}</h3>
+          <img src={{this.image}} alt={{this.title}} />
+        </div>
+        <div class="pData">
+          <p>{{this.category}}</p>
+          <p>{{this.description}}</p>
+          <p>Price: {{this.price}}</p>
+          <p>Stock: {{this.stock}}</p>
+        </div>
+        <div class="bnContainer">
+          <a href="/products/{{this._id}}">Product detail</a>
+          <button class="addBtn" data-id={{this._id}}>Add to cart</button>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</div>
+<script
+  src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js
+"
+></script>
+<script src="/js/addToCart.js"></script>
