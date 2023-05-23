@@ -8,7 +8,7 @@ deleteFromCart = async (e) => {
     console.log(res);
     let message = await res;
     console.log(message);
-    if (message.status === "success") {
+    if (message.status === 200) {
       Swal.fire({
         position: "top-end",
         icon: "success",

@@ -26,7 +26,7 @@ export default class Cart {
     const productInCart = cart.products.findIndex(
       (p) => p.product._id.toString() === pid.toString()
     );
-    console.log(productInCart);
+
     if (productInCart === -1) {
       cart.products.push({
         product: product._id,
@@ -42,7 +42,7 @@ export default class Cart {
   modifyQuantity = async (cid, pid, quantity) => {
     const cart = await this.getById(cid);
     const productInCart = cart.products.findIndex(
-      (p) => p.product.toString() === pid.toString()
+      (p) => p.product._id.toString() === pid.toString()
     );
     if (productInCart !== -1) {
       cart.products[productInCart].quantity += quantity;
@@ -56,7 +56,6 @@ export default class Cart {
     const productInCart = cart.products.findIndex(
       (p) => p.product._id.toString() === pid.toString()
     );
-    console.log(productInCart);
     if (productInCart !== -1) {
       cart.products.splice(productInCart, 1);
     }
