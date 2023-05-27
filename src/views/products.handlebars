@@ -2,6 +2,13 @@
 <a href="/carts/6468f3396c3a9260d3ef7a49">Cart</a>
 
 <div>
+  <div class="userData">
+    <h1>Bienvenido {{user.username}}</h1>
+    <p>Email: {{user.email}}</p>
+    <p>Age: {{user.age}}</p>
+    <p>Role: {{user.role}}</p>
+    <a href="/api/sessions/logout"><button>Cerrar sesión</button></a>
+  </div>
   <div class="generalContainer">
     {{#each products}}
       <div class="productContainer">

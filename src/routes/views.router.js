@@ -6,13 +6,21 @@ const productManager = new ProductManager();
 const cartManager = new CartManager();
 const router = Router();
 
+const publicAccess = (req, res, next) => {
+  if (req.session.user) return res.redirect('/products')
+  next()
+}
+
+const privateAccess = (req, res, next) => {
+  if (!req.session.user) return res.redirect('/login')
+  next()
+}
+
 router.get('/', (req, res) => {
-  
   res.render('index')
 })
 
-
-router.get("/products", async (req, res) => {
+router.get("/products", privateAccess, async (req, res) => {
   const { limit, page, sort, category, status } = req.query;
   try {
     const { docs } = await productManager.getAll({
@@ -23,14 +31,14 @@ router.get("/products", async (req, res) => {
       status,
     });
 
-    res.render("products", { products: docs });
+    res.render("products", { products: docs, user: req.session.user });
   } catch (error) {
     res.status(500).send({ error: "error", error });
     console.log(error);
   }
 });
 
-router.get("/carts/:cid", async (req, res) => {
+router.get("/carts/:cid", privateAccess, async (req, res) => {
   const { cid } = req.params;
   try {
     const { products } = await cartManager.getById(cid);
@@ -41,7 +49,7 @@ router.get("/carts/:cid", async (req, res) => {
   }
 });
 
-router.get("/products/:pid", async (req, res) => {
+router.get("/products/:pid", privateAccess,async (req, res) => {
   const { pid } = req.params;
   try {
     const product = await productManager.getById(pid);
@@ -51,6 +59,19 @@ router.get("/products/:pid", async (req, res) => {
   }
 });
 
+router.get('/login', publicAccess, async (req, res) => {
+  res.render('login')
+})
+
+router.get('/register', publicAccess, async (req, res) => {
+  res.render('register')
+})
+
+export default router;
+
+
+
+
 // router.get("/realtimeproducts", async (req, res) => {
 //   const products = await productManager.getAll();
 //   res.render("realTimeProducts", { products });
@@ -59,5 +80,3 @@ router.get("/products/:pid", async (req, res) => {
 // router.get("/messages", (req, res) => {
 //   res.render("messages");
 // });
-
-export default router;
