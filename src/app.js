@@ -51,7 +51,7 @@ app.use("/api/carts", cartsRouter);
 app.use("api/messages", messagesRouter);
 app.use("/realtimeproducts", viewsRouter);
 
-const server = app.listen(8082, () => console.log("Server running"));
+const server = app.listen(8080, () => console.log("Server running"));
 
 // const productManager = new ProductManager();
 // const messageManager = new MessageManager();
