@@ -67,6 +67,10 @@ router.get('/register', publicAccess, async (req, res) => {
   res.render('register')
 })
 
+router.get('/reset', publicAccess, async (req, res) => {
+  res.render('reset')
+})
+
 export default router;
 
 

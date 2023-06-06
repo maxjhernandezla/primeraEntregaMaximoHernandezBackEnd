@@ -3,15 +3,18 @@ import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import messagesRouter from "./routes/messages.router.js";
-import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import sessionsRouter from './routes/sessions.router.js'
-import ProductManager from "./dao/managers/dbManagers/productsManager.js";
-import MessageManager from "./dao/managers/dbManagers/messagesManager.js";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import session from 'express-session'
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
+
+//import { Server } from "socket.io";
+//import ProductManager from "./dao/managers/dbManagers/productsManager.js";
+//import MessageManager from "./dao/managers/dbManagers/messagesManager.js";
 
 const app = express();
 
@@ -44,6 +47,12 @@ app.use(
   })
 );
 
+//PASSPORT
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
+//HANDLEBARS
 app.use("/", viewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/products", productsRouter);
@@ -51,7 +60,7 @@ app.use("/api/carts", cartsRouter);
 app.use("api/messages", messagesRouter);
 app.use("/realtimeproducts", viewsRouter);
 
-const server = app.listen(8080, () => console.log("Server running"));
+const server = app.listen(8080, () => console.log("Server running on port 8080"));
 
 // const productManager = new ProductManager();
 // const messageManager = new MessageManager();
