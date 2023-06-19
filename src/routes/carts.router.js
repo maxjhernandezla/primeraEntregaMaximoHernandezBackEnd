@@ -32,7 +32,7 @@ router.post("/:cid/products/:pid", async (req, res) => {
     const result = await cartManager.addProductToCart(cid, pid);
     res.send({ status: "success", payload: result });
   } catch (error) {
-    res.status(500).send({ status: "error", error });
+    res.status(500).send({ status: "error", error: error.message });
     console.log(error);
   }
 });
@@ -61,7 +61,6 @@ router.put("/:cid", async (req, res) => {
 router.put("/:cid/products/:pid", async (req, res) => {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
-  console.log(quantity);
   try {
     const result = await cartManager.modifyQuantity(cid, pid, quantity);
     res.send({ status: "succes", payload: result });

@@ -16,11 +16,21 @@ const cartSchema = new mongoose.Schema({
         },
       },
     ],
+    default: [],
+  },
+  userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
   },
 });
+
 cartSchema.pre(["find", "findOne"], function () {
   this.populate("products.product");
 });
+cartSchema.pre("find", function () {
+  this.populate("userId");
+});
+
 const cartModel = mongoose.model(cartsCollection, cartSchema);
 
 export default cartModel;

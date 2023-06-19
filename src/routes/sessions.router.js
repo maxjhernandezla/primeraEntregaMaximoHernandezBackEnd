@@ -1,123 +1,133 @@
-import { Router } from "express";
+import  Router  from "./router.js";
 import passport from "passport";
 import { createHash } from "../utils.js";
 import userModel from "../dao/models/users.model.js";
+import { passportStrategiesEnum } from "../config/enums.config.js";
 
-const router = Router();
-
-router.post(
-  "/register",
-  passport.authenticate("register", { failureRedirect: "fail-register" }),
-  async (req, res) => {
-    res.send({ status: "success", message: "User registered" });
+export default class Sessions extends Router {
+  init() {
+    this.get("/current", ["USER"], passportStrategiesEnum.JWT, (req, res) =>{
+      const user = req.user;
+      res.sendSuccess(user)
+    })
   }
-);
 
-router.get("/fail-register", (req, res) => {
-  res.send({ status: "error", message: "Register failed" });
-});
 
-router.post(
-  "/login",
-  passport.authenticate("login", { failureRedirect: "fail-login" }),
-  async (req, res) => {
-    if (!req.user)
-      return res
-        .status(400)
-        .send({ status: "error", error: "Invalid credentials" });
 
-    if (req.user.email === "adminCoder@coder.com") {
-      req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age: req.user.age,
-        role: "admin",
-        email: req.user.email,
-      };
-    } else {
-      req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age: req.user.age,
-        role: "user",
-        email: req.user.email,
-      };
-    }
-    res.send({ status: "success", message: "Login success" });
-  }
-);
+}
 
-router.get("/fail-login", (req, res) => {
-  res.send({ status: "error", message: "Login failed" });
-});
+// const router = Router();
 
-router.get(
-  "/github",
-  passport.authenticate("github", { scope: ["user:email"] }),
-  async (req, res) => {
-    res.send({ status: "success", message: "user registered" });
-  }
-);
+// router.post(
+//   "/register",
+//   passport.authenticate("register", { failureRedirect: "fail-register" }),
+//   async (req, res) => {
+//     res.send({ status: "success", message: "User registered" });
+//   }
+// );
 
-router.get(
-  "/github-callback",
-  passport.authenticate("github", { failureRedirect: "/login" }),
-  async (req, res) => {
-    req.session.user = req.user;
-    if (req.user.email === "adminCoder@coder.com") {
-      req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age: req.user.age,
-        role: "admin",
-        email: req.user.email,
-      };
-    } else {
-      req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age: req.user.age,
-        role: "user",
-        email: req.user.email,
-      };
-    }
-    res.redirect("/");
-  }
-);
+// router.get("/fail-register", (req, res) => {
+//   res.send({ status: "error", message: "Register failed" });
+// });
 
-router.post("/reset", async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// router.post(
+//   "/login",
+//   passport.authenticate("login", { failureRedirect: "fail-login" }),
+//   async (req, res) => {
+//     if (!req.user)
+//       return res
+//         .status(400)
+//         .send({ status: "error", error: "Invalid credentials" });
 
-    if (!email || !password)
-      return res
-        .status(400)
-        .send({ status: "error", error: "Incomplete values" });
+//     if (req.user.email === "adminCoder@coder.com") {
+//       req.session.user = {
+//         first_name: req.user.first_name,
+//         last_name: req.user.last_name,
+//         age: req.user.age,
+//         role: "admin",
+//         email: req.user.email,
+//       };
+//     } else {
+//       req.session.user = {
+//         first_name: req.user.first_name,
+//         last_name: req.user.last_name,
+//         age: req.user.age,
+//         role: "user",
+//         email: req.user.email,
+//       };
+//     }
+//     res.send({ status: "success", message: "Login success" });
+//   }
+// );
 
-    const user = await userModel.findOne({ email });
-    if (!user) {
-      return res.status(400).send({ status: "error", error: "User not found" });
-    }
+// router.get("/fail-login", (req, res) => {
+//   res.send({ status: "error", message: "Login failed" });
+// });
 
-    user.password = createHash(password);
+// router.get(
+//   "/github",
+//   passport.authenticate("github", { scope: ["user:email"] }),
+//   async (req, res) => {
+//     res.send({ status: "success", message: "user registered" });
+//   }
+// );
 
-    await userModel.updateOne({ email }, user);
+// router.get(
+//   "/github-callback",
+//   passport.authenticate("github", { failureRedirect: "/login" }),
+//   async (req, res) => {
+//     req.session.user = req.user;
+//     if (req.user.email === "adminCoder@coder.com") {
+//       req.session.user = {
+//         first_name: req.user.first_name,
+//         last_name: req.user.last_name,
+//         age: req.user.age,
+//         role: "admin",
+//         email: req.user.email,
+//       };
+//     } else {
+//       req.session.user = {
+//         first_name: req.user.first_name,
+//         last_name: req.user.last_name,
+//         age: req.user.age,
+//         role: "user",
+//         email: req.user.email,
+//       };
+//     }
+//     res.redirect("/");
+//   }
+// );
 
-    res.send({ status: "success", message: "Password reset" });
-  } catch (error) {
-    res.status(500).send({ status: "error", error: error.message });
-  }
-});
+// router.post("/reset", async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) return res.status(500).send({ status: "error", error: err });
-    res.redirect("/login");
-  });
-});
+//     if (!email || !password)
+//       return res
+//         .status(400)
+//         .send({ status: "error", error: "Incomplete values" });
 
-export default router;
+//     const user = await userModel.findOne({ email });
+//     if (!user) {
+//       return res.status(400).send({ status: "error", error: "User not found" });
+//     }
 
+//     user.password = createHash(password);
+
+//     await userModel.updateOne({ email }, user);
+
+//     res.send({ status: "success", message: "Password reset" });
+//   } catch (error) {
+//     res.status(500).send({ status: "error", error: error.message });
+//   }
+// });
+
+// router.get("/logout", (req, res) => {
+//   req.session.destroy((err) => {
+//     if (err) return res.status(500).send({ status: "error", error: err });
+//     res.redirect("/login");
+//   });
+// });
 // try {
 //   const user = await userModel.findOne({ email, password });
 //   if (!user)

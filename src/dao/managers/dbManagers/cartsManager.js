@@ -22,7 +22,9 @@ export default class Cart {
 
   addProductToCart = async (cid, pid) => {
     const cart = await this.getById(cid);
+    console.log(cart);
     const product = await productModel.findById(pid);
+    console.log(product);
     const productInCart = cart.products.findIndex(
       (p) => p.product._id.toString() === pid.toString()
     );
