@@ -1,20 +1,39 @@
 import Router from "./router.js";
 import Users from "../dao/managers/dbManagers/usersManager.js";
-import {passportStrategiesEnum} from "../config/enums.config.js";
+import { passportStrategiesEnum } from "../config/enums.config.js";
 import { createHash, isValidPassword, generateToken } from "../utils.js";
 import Cart from "../dao/managers/dbManagers/cartsManager.js";
 const usersManager = new Users();
-const cartsManager = new Cart()
+const cartsManager = new Cart();
 
 export default class UsersRouter extends Router {
   init() {
     this.post("/login", ["PUBLIC"], passportStrategiesEnum.NOTHING, this.login);
-    this.post("/register",["PUBLIC"], passportStrategiesEnum.NOTHING, this.register);
-    this.get('/', ['PUBLIC'], passportStrategiesEnum.NOTHING, async(req, res) => {
-      const {email} = req.body
-      const result = await usersManager.getByEmail(email)
-      res.sendSuccess(result)
-    })
+    this.post(
+      "/register",
+      ["PUBLIC"],
+      passportStrategiesEnum.NOTHING,
+      this.register
+    );
+    this.get(
+      "/",
+      ["PUBLIC"],
+      passportStrategiesEnum.NOTHING,
+      async (req, res) => {
+        const { email } = req.body;
+        const result = await usersManager.getByEmail(email);
+        res.sendSuccess(result);
+      }
+    );
+    this.get(
+      "/all",
+      ["PUBLIC"],
+      passportStrategiesEnum.NOTHING,
+      async (req, res) => {
+        const result = await usersManager.getAll();
+        res.sendSuccess(result);
+      }
+    );
   }
 
   async login(req, res) {
@@ -40,17 +59,15 @@ export default class UsersRouter extends Router {
         return res.sendClientError("incomplete credentials");
       const exists = await usersManager.getByEmail(email);
       if (exists) return res.sendClientError("user already exists");
-      const hashedPassword = createHash(password)
-      const newUser = {...req.body}
-      newUser.password = hashedPassword
-      const cart = await cartsManager.create()
+      const hashedPassword = createHash(password);
+      const newUser = { ...req.body };
+      newUser.password = hashedPassword;
+      const cart = await cartsManager.create();
       newUser.cart = cart;
-      const result = await usersManager.save(newUser)
-      res.sendSuccess(result)
+      const result = await usersManager.save(newUser);
+      res.sendSuccess(result);
     } catch (error) {
       res.sendServerError(error.message);
     }
   }
-
-  
 }
