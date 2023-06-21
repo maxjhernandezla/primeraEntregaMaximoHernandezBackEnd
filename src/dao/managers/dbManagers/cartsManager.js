@@ -22,9 +22,7 @@ export default class Cart {
 
   addProductToCart = async (cid, pid) => {
     const cart = await this.getById(cid);
-    console.log(cart);
     const product = await productModel.findById(pid);
-    console.log(product);
     const productInCart = cart.products.findIndex(
       (p) => p.product._id.toString() === pid.toString()
     );
@@ -41,7 +39,7 @@ export default class Cart {
     return result;
   };
 
-  modifyQuantity = async (cid, pid, quantity) => {
+  updateQuantity = async (cid, pid, quantity) => {
     const cart = await this.getById(cid);
     const productInCart = cart.products.findIndex(
       (p) => p.product._id.toString() === pid.toString()

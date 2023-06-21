@@ -1,19 +1,18 @@
-import  Router  from "./router.js";
-import passport from "passport";
-import { createHash } from "../utils.js";
-import userModel from "../dao/models/users.model.js";
+import Router from "./router.js";
 import { passportStrategiesEnum } from "../config/enums.config.js";
 
-export default class Sessions extends Router {
+export default class SessionsRouter extends Router {
   init() {
-    this.get("/current", ["USER"], passportStrategiesEnum.JWT, (req, res) =>{
-      const user = req.user;
-      res.sendSuccess(user)
-    })
+    this.get("/current", ["USER", 'ADMIN'], passportStrategiesEnum.JWT, this.logged);
   }
-
-
-
+  logged(req, res) {
+    try {
+      const user = req.user;
+      res.sendSuccess(user);
+    } catch (error) {
+      res.sendServerError(error.message);
+    }
+  }
 }
 
 // const router = Router();

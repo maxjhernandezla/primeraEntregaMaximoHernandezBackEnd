@@ -1,11 +1,11 @@
 import express from "express";
-import productsRouter from "./routes/products.router.js";
-import cartsRouter from "./routes/carts.router.js";
+import ProductsRouter from "./routes/products.router.js";
+import CartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import messagesRouter from "./routes/messages.router.js";
 import handlebars from "express-handlebars";
 import {__dirname} from "./utils.js";
-import Sessions from './routes/sessions.router.js'
+import SessionsRouter from './routes/sessions.router.js'
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import session from 'express-session'
@@ -13,7 +13,9 @@ import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import UsersRouter from "./routes/users.router.js";
 
-const sessionsRouter = new Sessions()
+const sessionsRouter = new SessionsRouter()
+const productsRouter = new ProductsRouter()
+const cartsRouter = new CartsRouter()
 const usersRouter = new UsersRouter()
 const app = express();
 
@@ -55,8 +57,8 @@ app.use(passport.session())
 app.use("/", viewsRouter);
 app.use('/api/users', usersRouter.getRouter())
 app.use('/api/sessions', sessionsRouter.getRouter())
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
+app.use("/api/products", productsRouter.getRouter());
+app.use("/api/carts", cartsRouter.getRouter());
 app.use("api/messages", messagesRouter);
 app.use("/realtimeproducts", viewsRouter);
 

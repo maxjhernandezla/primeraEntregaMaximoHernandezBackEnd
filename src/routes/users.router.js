@@ -2,9 +2,9 @@ import Router from "./router.js";
 import Users from "../dao/managers/dbManagers/usersManager.js";
 import { passportStrategiesEnum } from "../config/enums.config.js";
 import { createHash, isValidPassword, generateToken } from "../utils.js";
-import Cart from "../dao/managers/dbManagers/cartsManager.js";
+import Carts from "../dao/managers/dbManagers/cartsManager.js";
 const usersManager = new Users();
-const cartsManager = new Cart();
+const cartsManager = new Carts();
 
 export default class UsersRouter extends Router {
   init() {
@@ -41,7 +41,6 @@ export default class UsersRouter extends Router {
       const { email, password } = req.body;
       const user = await usersManager.getByEmail(email);
       if (!user) return res.sendClientError("incorrect credentials");
-
       const comparePassword = isValidPassword(user, password);
       if (!comparePassword) return res.sendClientError("incorrect credentials");
       delete user.password;
