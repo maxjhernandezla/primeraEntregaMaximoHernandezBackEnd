@@ -10,7 +10,7 @@ export default class Users {
         return users
     }
 
-    getByEmail = async (email) => {
+    getUserByEmail = async (email) => {
         const user = await usersModel.findOne({email}).lean()
         return user
     }

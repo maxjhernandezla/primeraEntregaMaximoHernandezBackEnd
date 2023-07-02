@@ -1,46 +1,118 @@
 import Router from "./router.js";
+import Carts from "../dao/managers/dbManagers/cartsManager.js";
 import { passportStrategiesEnum } from "../config/enums.config.js";
-import {
-  getCarts,
-  getCartById,
-  addToCart,
-  createCart,
-  updateCart,
-  updateQuantity,
-  deleteProductInCart,
-  deleteAllProductsInCart,
-} from "../controllers/carts.controller.js";
+
+const cartManager = new Carts();
 
 export default class CartsRouter extends Router {
   init() {
-    this.get("/", ["ADMIN"], passportStrategiesEnum.JWT, getCarts);
-    this.get("/:cid", ["ADMIN"], passportStrategiesEnum.JWT, getCartById);
+    this.get("/", ["ADMIN"], passportStrategiesEnum.JWT, this.getAll);
+    this.get("/:cid", ["ADMIN"], passportStrategiesEnum.JWT, this.getByCartId);
     this.post(
       "/:cid/products/:pid",
       ["USER", "ADMIN"],
       passportStrategiesEnum.JWT,
-      addToCart
+      this.addToCart
     );
-    this.post("/", ["USER"], passportStrategiesEnum.JWT, createCart);
-    this.put("/:cid", ["USER"], passportStrategiesEnum.JWT, updateCart);
+    this.post("/", ["USER"], passportStrategiesEnum.JWT, this.createCart);
+    this.put("/:cid", ["USER"], passportStrategiesEnum.JWT, this.updateCart);
     this.put(
       "/:cid/products/:pid",
       ["USER"],
       passportStrategiesEnum.JWT,
-      updateQuantity
+      this.updateQuantity
     );
     this.delete(
       "cid/products/:pid",
       ["USER"],
       passportStrategiesEnum.JWT,
-      deleteProductInCart
+      this.deleteProductInCart
     );
     this.delete(
       "/:cid",
       ["USER"],
       passportStrategiesEnum.JWT,
-      deleteAllProductsInCart
+      this.deleteAllProductsInCart
     );
+  }
+  async getAll(req, res) {
+    try {
+      const users = await cartManager.getAll();
+      res.sendSuccess(users);
+    } catch (error) {
+      res.sendServerError(error.message);
+    }
+  }
+  async getByCartId(req, res) {
+    try {
+      const { cid } = req.params;
+      const result = await cartManager.getById(cid);
+      res.sendSuccess(result);
+    } catch (error) {
+      res.sendServerError(error.message);
+    }
+  }
+
+  async addToCart(req, res) {
+    try {
+      const { cid, pid } = req.params;
+      const result = await cartManager.addProductToCart(cid, pid);
+      res.sendSuccess(result);
+    } catch (error) {
+      res.sendServerError(error.message);
+    }
+  }
+
+  async createCart(req, res) {
+    try {
+      const { products } = req.body;
+      const result = await cartManager.create(products);
+      res.sendSuccess(result);
+    } catch (error) {
+      res.sendServerError(error.message);
+    }
+  }
+
+  async updateCart(req, res) {
+    try {
+      const { cid } = req.params;
+      const { products, quantity } = req.body;
+      const result = await cartManager.update(cid, { products, quantity });
+      res.sendSuccess(result);
+    } catch (error) {
+      res.sendServerError(error.message);
+    }
+  }
+
+  async updateQuantity(req, res) {
+    try {
+      const { cid, pid } = req.params;
+      const { quantity } = req.body;
+      const result = await cartManager.updateQuantity(cid, pid, quantity);
+      res.sendSuccess(result);
+    } catch (error) {
+      res.sendServerError(error.message);
+    }
+  }
+
+  async deleteProductInCart(req, res) {
+    try {
+      const { cid, pid } = req.params;
+      const result = await cartManager.deleteProductInCart(cid, pid);
+      res.sendSuccess(result);
+    } catch (error) {
+      res.sendServerError(error.message);
+    }
+  }
+
+  async deleteAllProductsInCart(req, res) {
+    try {
+      const { cid } = req.params;
+      const result = await cartManager.deleteAllProducts(cid);
+      res.sendSuccess(result);
+    } catch (error) {
+      res.sendServerError(error.message);
+    }
   }
 }
 

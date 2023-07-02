@@ -35,7 +35,6 @@ export default class Products {
     }
 
     const products = await productModel.paginate(queryObject, options);
-
     return products;
   };
 
@@ -50,7 +49,6 @@ export default class Products {
   };
 
   update = async (id, product) => {
-    console.log(id);
     const updatedProduct = await productModel.updateOne({ _id: id }, product);
     return updatedProduct;
   };

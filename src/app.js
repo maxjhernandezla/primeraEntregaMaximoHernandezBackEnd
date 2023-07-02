@@ -62,7 +62,7 @@ app.use("/api/carts", cartsRouter.getRouter());
 app.use("api/messages", messagesRouter);
 app.use("/realtimeproducts", viewsRouter);
 
-const server = app.listen(8080, () => console.log("Server running on port 8080"));
+app.listen(8080, () => console.log("Server running on port 8080"));
 
 // const productManager = new ProductManager();
 // const messageManager = new MessageManager();

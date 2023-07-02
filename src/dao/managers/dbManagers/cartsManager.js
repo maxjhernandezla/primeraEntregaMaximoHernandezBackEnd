@@ -15,8 +15,8 @@ export default class Cart {
     return cart;
   };
 
-  create = async (cart) => {
-    const newCart = await cartModel.create(cart);
+  create = async (products) => {
+    const newCart = await cartModel.create(products);
     return newCart;
   };
 

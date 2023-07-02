@@ -1,5 +1,4 @@
 import messageModel from "../../models/messages.model.js";
-import mongoose from "mongoose";
 
 export default class Message {
   constructor() {
