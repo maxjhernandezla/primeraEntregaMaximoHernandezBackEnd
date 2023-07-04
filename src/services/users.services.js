@@ -6,8 +6,13 @@ const getUserByEmail = async (email) => {
 };
 
 const createUser = async (user) => {
-    const result = await USERS_DAO.save(user)
-    return result
-}
+  const result = await USERS_DAO.save(user);
+  return result;
+};
 
-export { getUserByEmail, createUser };
+const getAllUsers = async () => {
+  const users = await USERS_DAO.getAll();
+  return users;
+};
+
+export { getUserByEmail, createUser, getAllUsers };

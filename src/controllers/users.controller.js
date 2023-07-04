@@ -1,6 +1,7 @@
 import {
   getUserByEmail as getUserByEmailService,
   createUser as createUserService,
+  getAllUsers as getAllUsersService
 } from "../services/users.services.js";
 import { createCart as createCartService } from "../services/carts.services.js";
 import { generateToken, isValidPassword, createHash } from "../utils.js";
@@ -39,4 +40,16 @@ const register = async (req, res) => {
   }
 };
 
-export { login, register };
+const getUserByEmail = async (req, res) => {
+  const { email } = req.body;
+  const result = await getUserByEmailService(email);
+  res.sendSuccess(result);
+}
+
+const getAllUsers = async (req, res) => {
+  const result = await getAllUsersService();
+  res.sendSuccess(result);
+}
+
+
+export { login, register, getUserByEmail, getAllUsers };
