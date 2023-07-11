@@ -2,10 +2,11 @@ import passport from "passport";
 import userModel from "../dao/models/users.model.js";
 import GitHubStrategy from "passport-github2";
 import jwt from "passport-jwt";
-import { PRIVATE_KEY } from "./constants.config.js";
+import config from './dotenv.config.js'
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
+const PRIVATE_KEY = config.privateKey;
 
 const initializePassport = () => {
   passport.use(
