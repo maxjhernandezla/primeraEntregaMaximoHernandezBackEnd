@@ -15,8 +15,8 @@ const addToCart = async (cid, pid) => {
   return result;
 };
 
-const createCart = async (products = []) => {
-  const result = await CARTS_DAO.create(products);
+const createCart = async () => {
+  const result = await CARTS_DAO.create();
   return result;
 };
 

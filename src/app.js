@@ -1,35 +1,30 @@
 import express from "express";
+import './dao/dbConfig.js'
 import ProductsRouter from "./routes/products.router.js";
 import CartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import messagesRouter from "./routes/messages.router.js";
 import handlebars from "express-handlebars";
-import {__dirname} from "./utils.js";
-import SessionsRouter from './routes/sessions.router.js'
+import { __dirname } from "./utils.js";
+import SessionsRouter from "./routes/sessions.router.js";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
-import session from 'express-session'
+import session from "express-session";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import UsersRouter from "./routes/users.router.js";
+import cors from 'cors'
 
-const sessionsRouter = new SessionsRouter()
-const productsRouter = new ProductsRouter()
-const cartsRouter = new CartsRouter()
-const usersRouter = new UsersRouter()
+const sessionsRouter = new SessionsRouter();
+const productsRouter = new ProductsRouter();
+const cartsRouter = new CartsRouter();
+const usersRouter = new UsersRouter();
+
 const app = express();
-
-try {
-  await mongoose.connect(
-    "mongodb+srv://maximojhernandezla:Iru151220@cluster0mh.tlhs7mz.mongodb.net/ecommerce?retryWrites=true&w=majority"
-  );
-  console.log("DB connected");
-} catch (error) {
-  console.log(error);
-}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors())
 
 app.use(express.static(`${__dirname}/public`));
 app.engine("handlebars", handlebars.engine());
@@ -49,14 +44,14 @@ app.use(
 );
 
 //PASSPORT
-initializePassport()
-app.use(passport.initialize())
-app.use(passport.session())
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //HANDLEBARS
 app.use("/", viewsRouter);
-app.use('/api/users', usersRouter.getRouter())
-app.use('/api/sessions', sessionsRouter.getRouter())
+app.use("/api/users", usersRouter.getRouter());
+app.use("/api/sessions", sessionsRouter.getRouter());
 app.use("/api/products", productsRouter.getRouter());
 app.use("/api/carts", cartsRouter.getRouter());
 app.use("api/messages", messagesRouter);
