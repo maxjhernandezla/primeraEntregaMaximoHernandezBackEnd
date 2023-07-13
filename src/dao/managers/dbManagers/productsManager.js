@@ -5,35 +5,7 @@ export default class Products {
     console.log("Working products whith DB");
   }
 
-  getAll = async ({ limit, page, sort, category, status }) => {
-    if (!limit) {
-      limit = 10;
-    }
-
-    if (!page) {
-      page = 1;
-    }
-
-    let options = { lean: true, limit, page };
-
-    if (sort === "asc") {
-      options.sort = { price: 1 };
-    } else if (sort === "desc") {
-      options.sort = { price: -1 };
-    } else {
-      options.sort = {};
-    }
-
-    let queryObject = {};
-
-    if (category) {
-      queryObject.category = category;
-    }
-
-    if (status) {
-      queryObject.status = status;
-    }
-
+  getAll = async (queryObject, options) => {
     const products = await productModel.paginate(queryObject, options);
     return products;
   };

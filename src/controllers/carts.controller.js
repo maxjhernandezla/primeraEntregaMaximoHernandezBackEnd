@@ -6,7 +6,8 @@ import {
   updateCart as updateCartService,
   updateQuantity as updateQuantityService,
   deleteProductInCart as deleteProductInCartService,
-  deleteAllProductsInCart as deleteAllProductsInCartService
+  deleteAllProductsInCart as deleteAllProductsInCartService,
+  purchase as purchaseService,
 } from "../services/carts.services.js";
 
 const getCarts = async (req, res) => {
@@ -35,6 +36,7 @@ const addToCart = async (req, res) => {
     res.sendSuccess(result);
   } catch (error) {
     res.sendServerError(error.message);
+    console.log(error);
   }
 };
 
@@ -90,6 +92,17 @@ const deleteAllProductsInCart = async (req, res) => {
   }
 };
 
+const purchase = async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const user = req.user;
+    const result = await purchaseService(cid, user);
+    res.sendSuccess(result);
+  } catch (error) {
+    res.sendServerError(error.message);
+  }
+};
+
 export {
   getCarts,
   getCartById,
@@ -99,4 +112,5 @@ export {
   updateQuantity,
   deleteProductInCart,
   deleteAllProductsInCart,
+  purchase,
 };

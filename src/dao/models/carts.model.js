@@ -12,24 +12,26 @@ const cartSchema = new mongoose.Schema({
         },
         quantity: {
           type: Number,
-          default: 1,
+          require: true,
+          default: 1
         },
       },
     ],
     default: [],
+    require: true,
   },
-  userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-  },
+  // userId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "users",
+  // },
 });
 
 cartSchema.pre(["find", "findOne"], function () {
   this.populate("products.product");
 });
-cartSchema.pre(["find", "findOne"], function () {
-  this.populate("userId");
-});
+// cartSchema.pre(["find", "findOne"], function () {
+//   this.populate("userId");
+// });
 
 const cartModel = mongoose.model(cartsCollection, cartSchema);
 

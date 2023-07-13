@@ -1,6 +1,6 @@
 import Router from "./router.js";
 import { passportStrategiesEnum } from "../config/enums.config.js";
-import { getProducts, getProductById, createProduct, updateProduct } from "../controllers/products.controller.js";
+import { getProducts, getProductById, createProduct, updateProduct, deleteProduct } from "../controllers/products.controller.js";
 
 export default class ProductsRouter extends Router {
   init() {
@@ -23,5 +23,6 @@ export default class ProductsRouter extends Router {
       passportStrategiesEnum.JWT,
       updateProduct
     );
+    this.delete('/:pid', ["ADMIN"], passportStrategiesEnum.JWT, deleteProduct)
   }
 }

@@ -20,59 +20,27 @@ export default class Cart {
     return newCart;
   };
 
-  addProductToCart = async (cid, pid) => {
-    const cart = await this.getById(cid);
-    const product = await productModel.findById(pid);
-    const productInCart = cart.products.findIndex(
-      (p) => p.product._id.toString() === pid.toString()
-    );
-
-    if (productInCart === -1) {
-      cart.products.push({
-        product: product._id,
-      });
-    } else {
-      cart.products[productInCart].quantity++;
-    }
-
-    const result = await this.update(cart._id, cart);
-    return result;
-  };
-
-  updateQuantity = async (cid, pid, quantity) => {
-    const cart = await this.getById(cid);
-    const productInCart = cart.products.findIndex(
-      (p) => p.product._id.toString() === pid.toString()
-    );
-    if (productInCart !== -1) {
-      cart.products[productInCart].quantity += quantity;
-    }
-    const result = await this.update(cart._id, cart);
-    return result;
-  };
-
-  deleteProductInCart = async (cid, pid) => {
-    const cart = await this.getById(cid);
-    const productInCart = cart.products.findIndex(
-      (p) => p.product._id.toString() === pid.toString()
-    );
-    if (productInCart !== -1) {
-      cart.products.splice(productInCart, 1);
-    }
-
-    const result = await this.update(cart._id, cart);
-    return result;
-  };
-
   update = async (id, cart) => {
     const updatedCart = await cartModel.updateOne({ _id: id }, cart);
     return updatedCart;
   };
 
-  deleteAllProducts = async (cid) => {
-    const cart = await this.getById(cid);
-    cart.products.splice(0, cart.products.length);
+  addProductToCart = async (id, cart) => {
+    const result = await this.update(id, cart);
+    return result;
+  };
 
+  updateQuantity = async (cart) => {
+    const result = await this.update(cart._id, cart);
+    return result;
+  };
+
+  deleteProductInCart = async (cart) => {
+    const result = await this.update(cart._id, cart);
+    return result;
+  };
+
+  deleteAllProducts = async (cart) => {
     const result = await this.update(cart._id, cart);
     return result;
   };
