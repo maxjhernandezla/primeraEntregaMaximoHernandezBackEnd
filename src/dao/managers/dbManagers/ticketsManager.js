@@ -9,4 +9,9 @@ export default class Ticket {
         const result = await ticketsModel.create(ticket)
         return result
     }
+
+    getAll = async (ticket) => {
+        const result = await ticketsModel.find()
+        return result
+    }
 }
