@@ -14,6 +14,7 @@ import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import UsersRouter from "./routes/users.router.js";
 import cors from 'cors'
+import errorHandler from './middleware/errors/index.js'
 
 const sessionsRouter = new SessionsRouter();
 const productsRouter = new ProductsRouter();
@@ -57,6 +58,8 @@ app.use("/api/products", productsRouter.getRouter());
 app.use("/api/carts", cartsRouter.getRouter());
 app.use("api/messages", messagesRouter);
 app.use("/realtimeproducts", viewsRouter);
+
+app.use(errorHandler)
 
 app.listen(8080, () => console.log("Server running on port 8080"));
 
