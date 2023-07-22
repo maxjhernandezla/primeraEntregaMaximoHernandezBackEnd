@@ -1,10 +1,11 @@
 import { Router as expressRouter } from 'express';
 import { passportStrategiesEnum } from '../config/enums.config.js';
 import passport from 'passport';
+import toAsyncRouter from 'async-express-decorator';
 
 export default class Router {
     constructor() {
-        this.router = expressRouter();
+        this.router = toAsyncRouter(expressRouter());
         this.init();
     }
 
@@ -20,7 +21,7 @@ export default class Router {
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            this.applyCallbacks(callbacks)
+            ...this.applyCallbacks(callbacks)
         );
     }
 
@@ -30,7 +31,7 @@ export default class Router {
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            this.applyCallbacks(callbacks)
+            ...this.applyCallbacks(callbacks)
         );
     }
 
@@ -40,7 +41,7 @@ export default class Router {
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            this.applyCallbacks(callbacks)
+            ...this.applyCallbacks(callbacks)
         );
     }
 
@@ -50,7 +51,7 @@ export default class Router {
             this.applyCustomPassportCall(passportStrategy),
             this.handlePolicies(policies),
             this.generateCustomReponse,
-            this.applyCallbacks(callbacks)
+            ...this.applyCallbacks(callbacks)
         );
     }
 
