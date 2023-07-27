@@ -14,7 +14,7 @@ import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import UsersRouter from "./routes/users.router.js";
 import cors from 'cors'
-import errorHandler from './middleware/errors/index.js'
+import errorHandler from './middlewares/errors/index.js'
 
 const sessionsRouter = new SessionsRouter();
 const cartsRouter = new CartsRouter();
@@ -55,7 +55,7 @@ app.use("/api/users", usersRouter.getRouter());
 app.use("/api/sessions", sessionsRouter.getRouter());
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter.getRouter());
-app.use("api/messages", messagesRouter);
+app.use("/api/messages", messagesRouter);
 app.use("/realtimeproducts", viewsRouter);
 
 app.use(errorHandler)

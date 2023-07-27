@@ -5,10 +5,10 @@ import {
   updateProduct as updateProductService,
   deleteProduct as deleteProductService,
 } from "../services/products.services.js";
-import { generateProductErrorAttributes } from "../middleware/errors/info.js";
-import CustomError from "../middleware/errors/CustomError.js";
+import { generateProductErrorAttributes, generateProductErrorIdNotFound } from "../middlewares/errors/info.js";
+import CustomError from "../middlewares/errors/CustomError.js";
 import { generateMockProduct } from "../utils.js";
-import EErrors from "../middleware/errors/enums.js";
+import EErrors from "../middlewares/errors/enums.js";
 
 const getProducts = async (req, res) => {
   const { limit, page, sort, category, status } = req.query;
@@ -27,21 +27,24 @@ const getProducts = async (req, res) => {
 };
 
 const getProductById = async (req, res) => {
-  try {
     const { pid } = req.params;
     const result = await getProductByIdService(pid);
-    if (!result) return res.sendClientError("product not found");
-    res.sendSuccess(result);
-  } catch (error) {
-    res.sendServerError(error.message);
-  }
+    if (!result) {
+      throw CustomError.createError({
+        name: "ID_NOT_FOUND",
+        cause: generateProductErrorIdNotFound(pid),
+        message: "Error trying find the product.",
+        code: EErrors.ID_NOT_FOUND,
+      });
+    }
+    res.send(result);
 };
 
 const createProduct = async (req, res) => {
   const { title, description, price, image, category, stock, code, status } =
     req.body;
   if (!title || !description || !price || !category || !stock || !code) {
-    throw new CustomError.createError({
+    throw CustomError.createError({
       name: "TYPE_ERROR",
       cause: generateProductErrorAttributes(req.body),
       message: "Error trying to create the product.",
@@ -49,12 +52,7 @@ const createProduct = async (req, res) => {
     });
   }
   const result = await createProductService({ ...req.body });
-  res.sendSuccess(result);
-  //try {
-  // } catch (error) {
-  //   res.sendServerError(error);
-  //   console.log(error.message);
-  // }
+  res.send(result);
 };
 
 const updateProduct = async (req, res) => {
@@ -66,8 +64,9 @@ const updateProduct = async (req, res) => {
       return res.status(400).sendClientError("incomplete values");
     }
     const result = await updateProductService(pid, { ...req.body });
-    res.sendSuccess(result);
+    res.send(result);
   } catch (error) {
+
     res.sendServerError(error.message);
   }
 };
@@ -78,9 +77,9 @@ const deleteProduct = async (req, res) => {
     const exists = await getProductByIdService(pid);
     if (!exists) return res.sendClientError("product not found");
     const result = await deleteProductService(pid);
-    res.sendSuccess(result);
+    res.send(result);
   } catch (error) {
-    res.sendServerError(error.message);
+    res.status(400).send(error.message);
   }
 };
 
@@ -90,7 +89,7 @@ const getMocksProducts = async (req, res) => {
     for (let i = 0; i < 100; i++) {
       products.push(generateMockProduct());
     }
-    res.sendSuccess(products);
+    res.send(products);
   } catch (error) {
     console.log(error.message);
   }

@@ -14,28 +14,22 @@ const router = toAsyncExpressDecorator(Router());
 
 router.get(
   "/mockingproducts",
-  ["ADMIN"],
-  passportStrategiesEnum.JWT,
   getMocksProducts
 );
 
 router.get(
   "/",
-  ["PUBLIC", "USER", "ADMIN"],
-  passportStrategiesEnum.NOTHING,
   getProducts
 );
 
 router.get(
   "/:pid",
-  ["PUBLIC", "USER", "ADMIN"],
-  passportStrategiesEnum.NOTHING,
   getProductById
 );
 
-router.post("/", ["ADMIN"], passportStrategiesEnum.JWT, createProduct);
-router.put("/:pid", ["ADMIN"], passportStrategiesEnum.JWT, updateProduct);
-router.delete("/:pid", ["ADMIN"], passportStrategiesEnum.JWT, deleteProduct);
+router.post("/", createProduct);
+router.put("/:pid", updateProduct);
+router.delete("/:pid", deleteProduct);
 
 export default router;
 

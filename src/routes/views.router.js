@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { publicAccess, privateAccess } from "../middleware/middlewares.js";
+import { publicAccess, privateAccess } from "../middlewares/middlewares.js";
 import {
   getProducts,
   getProductById,
