@@ -5,10 +5,10 @@ import {
   updateProduct as updateProductService,
   deleteProduct as deleteProductService,
 } from "../services/products.services.js";
-import {generateProductErrorAttributes} from '../middleware/errors/info.js'
-import CustomError from '../middleware/errors/CustomError.js'
+import { generateProductErrorAttributes } from "../middleware/errors/info.js";
+import CustomError from "../middleware/errors/CustomError.js";
 import { generateMockProduct } from "../utils.js";
-import EErrors from '../middleware/errors/enums.js'
+import EErrors from "../middleware/errors/enums.js";
 
 const getProducts = async (req, res) => {
   const { limit, page, sort, category, status } = req.query;
@@ -20,9 +20,9 @@ const getProducts = async (req, res) => {
       category,
       status,
     });
-    res.sendSuccess(products);
+    res.send(products);
   } catch (error) {
-    res.sendServerError(error.message);
+    res.status(404).send({ error: error.message });
   }
 };
 
@@ -39,29 +39,28 @@ const getProductById = async (req, res) => {
 
 const createProduct = async (req, res) => {
   const { title, description, price, image, category, stock, code, status } =
-  req.body;
+    req.body;
   if (!title || !description || !price || !category || !stock || !code) {
-    throw CustomError.createError({
+    throw new CustomError.createError({
       name: "TYPE_ERROR",
       cause: generateProductErrorAttributes(req.body),
       message: "Error trying to create the product.",
-      code: EErrors.INVALID_TYPE_ERROR
+      code: EErrors.INVALID_TYPE_ERROR,
     });
   }
   const result = await createProductService({ ...req.body });
   res.sendSuccess(result);
   //try {
-    // } catch (error) {
-    //   res.sendServerError(error);
-    //   console.log(error.message);
-    // }
-  };
-
+  // } catch (error) {
+  //   res.sendServerError(error);
+  //   console.log(error.message);
+  // }
+};
 
 const updateProduct = async (req, res) => {
   try {
     const { title, description, price, image, category, stock, code, status } =
-    req.body;
+      req.body;
     const { pid } = req.params;
     if (!title || !description || !price || !category || !stock || !code) {
       return res.status(400).sendClientError("incomplete values");
@@ -92,11 +91,9 @@ const getMocksProducts = async (req, res) => {
       products.push(generateMockProduct());
     }
     res.sendSuccess(products);
-  } catch (error) { 
+  } catch (error) {
     console.log(error.message);
   }
-  
-  
 };
 
 export {

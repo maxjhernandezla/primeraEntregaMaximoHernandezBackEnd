@@ -1,6 +1,6 @@
 import express from "express";
 import './dao/dbConfig.js'
-import ProductsRouter from "./routes/products.router.js";
+import productsRouter from "./routes/products.router.js";
 import CartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import messagesRouter from "./routes/messages.router.js";
@@ -17,7 +17,6 @@ import cors from 'cors'
 import errorHandler from './middleware/errors/index.js'
 
 const sessionsRouter = new SessionsRouter();
-const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
 
@@ -54,7 +53,7 @@ app.use(passport.session());
 app.use("/", viewsRouter);
 app.use("/api/users", usersRouter.getRouter());
 app.use("/api/sessions", sessionsRouter.getRouter());
-app.use("/api/products", productsRouter.getRouter());
+app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter.getRouter());
 app.use("api/messages", messagesRouter);
 app.use("/realtimeproducts", viewsRouter);
