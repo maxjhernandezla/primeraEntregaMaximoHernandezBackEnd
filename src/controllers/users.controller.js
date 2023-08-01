@@ -17,8 +17,10 @@ const login = async (req, res) => {
     if (!comparePassword) return res.sendClientError("incorrect credentials");
     const dtoUser = new UserDto(user);
     const accessToken = generateToken(dtoUser);
+    req.logger.info(`INFO => date: ${new Date()} - message: ${user.email} logged in`);
     res.sendSuccess({ accessToken });
   } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     res.sendServerError(error.message);
   }
 };
@@ -41,21 +43,33 @@ const register = async (req, res) => {
     if (result) {
       await registerEmail(newUser)
     }
+    req.logger.info(`INFO => date: ${new Date()} - message: new user registered`);
     res.sendSuccess(result);
   } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     res.sendServerError(error.message);
   }
 };
 
 const getUserByEmail = async (req, res) => {
-  const { email } = req.body;
-  const result = await getUserByEmailService(email);
-  res.sendSuccess(result);
+  try {
+    const { email } = req.body;
+    const result = await getUserByEmailService(email);
+    res.sendSuccess(result);  
+  } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
+    res.sendServerError(error.message);
+  }
 };
 
 const getAllUsers = async (req, res) => {
-  const result = await getAllUsersService();
-  res.sendSuccess(result);
+  try {
+    const result = await getAllUsersService();
+    res.sendSuccess(result);
+  } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
+    res.sendServerError(error.message);
+  }
 };
 
 export { login, register, getUserByEmail, getAllUsers };

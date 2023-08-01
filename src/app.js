@@ -13,12 +13,15 @@ import session from "express-session";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import UsersRouter from "./routes/users.router.js";
+import LoggerRouter from "./routes/logger.router.js";
 import cors from 'cors'
 import errorHandler from './middlewares/errors/index.js'
+import { addLogger } from "./middlewares/logger.js";
 
 const sessionsRouter = new SessionsRouter();
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
+const loggerRouter = new LoggerRouter();
 
 
 const app = express();
@@ -26,6 +29,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
+
+app.use(addLogger)
 
 app.use(express.static(`${__dirname}/public`));
 app.engine("handlebars", handlebars.engine());
@@ -56,7 +61,8 @@ app.use("/api/sessions", sessionsRouter.getRouter());
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter.getRouter());
 app.use("/api/messages", messagesRouter);
-app.use("/realtimeproducts", viewsRouter);
+app.use("/api/logger", loggerRouter.getRouter());
+
 
 app.use(errorHandler)
 

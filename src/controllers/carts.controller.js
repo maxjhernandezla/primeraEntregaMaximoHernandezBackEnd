@@ -15,6 +15,7 @@ const getCarts = async (req, res) => {
     const carts = await getCartsService();
     res.sendSuccess(carts);
   } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     res.sendServerError(error.message);
   }
 };
@@ -25,6 +26,7 @@ const getCartById = async (req, res) => {
     const cart = await getCartByIdService(cid);
     res.sendSuccess(cart);
   } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     res.sendServerError(error.message);
   }
 };
@@ -35,8 +37,8 @@ const addToCart = async (req, res) => {
     const result = await addToCartService(cid, pid);
     res.sendSuccess(result);
   } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     res.sendServerError(error.message);
-    console.log(error);
   }
 };
 
@@ -46,6 +48,7 @@ const createCart = async (req, res) => {
     const result = await createCartService(products);
     res.sendSuccess(result);
   } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     res.sendServerError(error.message);
   }
 };

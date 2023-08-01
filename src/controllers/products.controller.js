@@ -5,7 +5,10 @@ import {
   updateProduct as updateProductService,
   deleteProduct as deleteProductService,
 } from "../services/products.services.js";
-import { generateProductErrorAttributes, generateProductErrorIdNotFound } from "../middlewares/errors/info.js";
+import {
+  generateProductErrorAttributes,
+  generateProductErrorIdNotFound,
+} from "../middlewares/errors/info.js";
 import CustomError from "../middlewares/errors/CustomError.js";
 import { generateMockProduct } from "../utils.js";
 import EErrors from "../middlewares/errors/enums.js";
@@ -22,22 +25,24 @@ const getProducts = async (req, res) => {
     });
     res.send(products);
   } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     res.status(404).send({ error: error.message });
   }
 };
 
 const getProductById = async (req, res) => {
-    const { pid } = req.params;
-    const result = await getProductByIdService(pid);
-    if (!result) {
-      throw CustomError.createError({
-        name: "ID_NOT_FOUND",
-        cause: generateProductErrorIdNotFound(pid),
-        message: "Error trying find the product.",
-        code: EErrors.ID_NOT_FOUND,
-      });
-    }
-    res.send(result);
+  const { pid } = req.params;
+  const result = await getProductByIdService(pid);
+  if (!result) {
+    throw CustomError.createError({
+      name: "ID_NOT_FOUND",
+      cause: generateProductErrorIdNotFound(pid),
+      message: "Error trying find the product.",
+      code: EErrors.ID_NOT_FOUND,
+    });
+
+  }
+  res.send(result);
 };
 
 const createProduct = async (req, res) => {
@@ -66,7 +71,7 @@ const updateProduct = async (req, res) => {
     const result = await updateProductService(pid, { ...req.body });
     res.send(result);
   } catch (error) {
-
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     res.sendServerError(error.message);
   }
 };
@@ -79,6 +84,7 @@ const deleteProduct = async (req, res) => {
     const result = await deleteProductService(pid);
     res.send(result);
   } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     res.status(400).send(error.message);
   }
 };
@@ -91,6 +97,7 @@ const getMocksProducts = async (req, res) => {
     }
     res.send(products);
   } catch (error) {
+    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
     console.log(error.message);
   }
 };
