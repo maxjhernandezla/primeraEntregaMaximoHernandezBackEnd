@@ -7,7 +7,6 @@ import {
 } from "../mailing/mailing.js";
 
 const createTicket = async (purchaser, amount, productsWithoutStock) => {
-  console.log(productsWithoutStock);
   const purchase_datetime = Date.now();
   const code = uuidv4();
   const ticket = {

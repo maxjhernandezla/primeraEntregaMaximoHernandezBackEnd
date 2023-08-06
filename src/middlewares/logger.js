@@ -65,6 +65,8 @@ if (ENVIROMENT === "production") {
 
 export const addLogger = (req, res, next) => {
   req.logger = logger;
-  req.logger.info(`${req.method} en ${req.url} - ${new Date().toISOString()}`);
+  //req.logger.info(`${req.method} en ${req.url} - ${new Date().toISOString()}`);
   next();
 };
+
+export default logger;

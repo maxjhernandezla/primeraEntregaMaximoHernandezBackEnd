@@ -1,6 +1,6 @@
-import { Router } from "express";
+import Router from "./router.js";
 import { passportStrategiesEnum } from "../config/enums.config.js";
-import toAsyncExpressDecorator from "async-express-decorator";
+//import toAsyncExpressDecorator from "async-express-decorator";
 import {
   getProducts,
   getProductById,
@@ -10,51 +10,50 @@ import {
   getMocksProducts,
 } from "../controllers/products.controller.js";
 
-const router = toAsyncExpressDecorator(Router());
+export default class ProductsRouter extends Router {
+  init() {
+    this.get(
+      "/mockingproducts",
+      ["ADMIN"],
+      passportStrategiesEnum.JWT,
+      getMocksProducts
+    );
+    this.get(
+      "/",
+      ["PUBLIC", "USER", "ADMIN"],
+      passportStrategiesEnum.NOTHING,
+      getProducts
+    );
+    this.get(
+      "/:pid",
+      ["PUBLIC", "USER", "ADMIN"],
+      passportStrategiesEnum.NOTHING,
+      getProductById
+    );
+    this.post("/", ["ADMIN"], passportStrategiesEnum.JWT, createProduct);
+    this.put("/:pid", ["ADMIN"], passportStrategiesEnum.JWT, updateProduct);
+    this.delete("/:pid", ["ADMIN"], passportStrategiesEnum.JWT, deleteProduct);
+  }
+}
 
-router.get(
-  "/mockingproducts",
-  getMocksProducts
-);
+// const router = toAsyncExpressDecorator(Router());
 
-router.get(
-  "/",
-  getProducts
-);
+// router.get(
+//   "/mockingproducts",
+//   getMocksProducts
+// );
 
-router.get(
-  "/:pid",
-  getProductById
-);
+// router.get(
+//   "/",
+//   getProducts
+// );
 
-router.post("/", createProduct);
-router.put("/:pid", updateProduct);
-router.delete("/:pid", deleteProduct);
+// router.get(
+//   "/:pid",
+//   getProductById
+// );
 
-export default router;
-
-// export default class ProductsRouter extends Router {
-//   init() {
-//     this.get(
-//       "/mockingproducts",
-//       ["ADMIN"],
-//       passportStrategiesEnum.JWT,
-//       getMocksProducts
-//     );
-//     this.get(
-//       "/",
-//       ["PUBLIC", "USER", "ADMIN"],
-//       passportStrategiesEnum.NOTHING,
-//       getProducts
-//     );
-//     this.get(
-//       "/:pid",
-//       ["PUBLIC", "USER", "ADMIN"],
-//       passportStrategiesEnum.NOTHING,
-//       getProductById
-//     );
-//     this.post("/", ["ADMIN"], passportStrategiesEnum.JWT, createProduct);
-//     this.put("/:pid", ["ADMIN"], passportStrategiesEnum.JWT, updateProduct);
-//     this.delete("/:pid", ["ADMIN"], passportStrategiesEnum.JWT, deleteProduct);
-//   }
-//}
+// router.post("/", createProduct);
+// router.put("/:pid", updateProduct);
+// router.delete("/:pid", deleteProduct);
+//export default router;

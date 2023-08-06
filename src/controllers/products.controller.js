@@ -1,22 +1,14 @@
+import * as productsService from "../services/products.services.js";
+import { generateMockProduct } from "../utils/utils.js";
 import {
-  getProducts as getProductsService,
-  getProductById as getProductByIdService,
-  createProduct as createProductService,
-  updateProduct as updateProductService,
-  deleteProduct as deleteProductService,
-} from "../services/products.services.js";
-import {
-  generateProductErrorAttributes,
-  generateProductErrorIdNotFound,
-} from "../middlewares/errors/info.js";
-import CustomError from "../middlewares/errors/CustomError.js";
-import { generateMockProduct } from "../utils.js";
-import EErrors from "../middlewares/errors/enums.js";
+  IncompleteValues,
+  ProductNotFound,
+} from "../utils/custom-exceptions.js";
 
 const getProducts = async (req, res) => {
   const { limit, page, sort, category, status } = req.query;
   try {
-    const products = await getProductsService({
+    const products = await productsService.getProducts({
       limit,
       page,
       sort,
@@ -25,53 +17,59 @@ const getProducts = async (req, res) => {
     });
     res.send(products);
   } catch (error) {
-    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
-    res.status(404).send({ error: error.message });
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
+    res.status(500).send({ error: error.message });
   }
 };
 
 const getProductById = async (req, res) => {
-  const { pid } = req.params;
-  const result = await getProductByIdService(pid);
-  if (!result) {
-    throw CustomError.createError({
-      name: "ID_NOT_FOUND",
-      cause: generateProductErrorIdNotFound(pid),
-      message: "Error trying find the product.",
-      code: EErrors.ID_NOT_FOUND,
-    });
-
+  try {
+    const { pid } = req.params;
+    const result = await productsService.getProductById(pid);
+    res.send(result);
+  } catch (error) {
+    if (error instanceof ProductNotFound) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
+    res.status(500).send({ error: error.message });
   }
-  res.send(result);
 };
 
 const createProduct = async (req, res) => {
-  const { title, description, price, image, category, stock, code, status } =
-    req.body;
-  if (!title || !description || !price || !category || !stock || !code) {
-    throw CustomError.createError({
-      name: "TYPE_ERROR",
-      cause: generateProductErrorAttributes(req.body),
-      message: "Error trying to create the product.",
-      code: EErrors.INVALID_TYPE_ERROR,
-    });
+  try {
+    const result = await productsService.createProduct({ ...req.body });
+    res.sendSuccess(result);
+  } catch (error) {
+    if (error instanceof IncompleteValues) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
+    res.sendServerError(error.message);
   }
-  const result = await createProductService({ ...req.body });
-  res.send(result);
 };
 
 const updateProduct = async (req, res) => {
   try {
-    const { title, description, price, image, category, stock, code, status } =
-      req.body;
     const { pid } = req.params;
-    if (!title || !description || !price || !category || !stock || !code) {
-      return res.status(400).sendClientError("incomplete values");
-    }
-    const result = await updateProductService(pid, { ...req.body });
+    const result = await productsService.updateProduct(pid, { ...req.body });
     res.send(result);
   } catch (error) {
-    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
+    if (error instanceof ProductNotFound) {
+      return res.sendClientError(error.message);
+    }
+    if (error instanceof IncompleteValues) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
@@ -79,13 +77,16 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { pid } = req.params;
-    const exists = await getProductByIdService(pid);
-    if (!exists) return res.sendClientError("product not found");
-    const result = await deleteProductService(pid);
-    res.send(result);
+    const result = await productsService.deleteProduct(pid);
+    res.sendSuccess(result);
   } catch (error) {
-    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
-    res.status(400).send(error.message);
+    if (error instanceof ProductNotFound) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
+    res.sendServerError(error.message);
   }
 };
 
@@ -97,7 +98,9 @@ const getMocksProducts = async (req, res) => {
     }
     res.send(products);
   } catch (error) {
-    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     console.log(error.message);
   }
 };
@@ -111,20 +114,36 @@ export {
   getMocksProducts,
 };
 
-// const createProduct = async (req, res) => {
-//   try {
-//     const { title, description, price, image, category, stock, code, status } =
-//       req.body;
-//     if (!title || !description || !price || !category || !stock || !code) {
-//       return res.status(400).sendClientError("incomplete values");
-//     }
-//     const result = await createProductService({ ...req.body });
-//     res.sendSuccess(result);
-//   } catch (error) {
-//     res.sendServerError(error.message);
-//   }
-// };
-
 // {
 //   "title": "", "description": "", "price": "", "image": "", "category": "", "stock": "", "code": "", "status": ""
 // }
+
+// const getProductById = async (req, res) => {
+//   const { pid } = req.params;
+//   const result = await getProductByIdService(pid);
+//   if (!result) {
+//     throw CustomError.createError({
+//       name: "ID_NOT_FOUND",
+//       cause: generateProductErrorIdNotFound(pid),
+//       message: "Error trying find the product.",
+//       code: EErrors.ID_NOT_FOUND,
+//     });
+
+//   }
+//   res.send(result);
+// };
+
+// const createProduct = async (req, res) => {
+//   const { title, description, price, image, category, stock, code, status } =
+//     req.body;
+//   if (!title || !description || !price || !category || !stock || !code) {
+//     throw CustomError.createError({
+//       name: "TYPE_ERROR",
+//       cause: generateProductErrorAttributes(req.body),
+//       message: "Error trying to create the product.",
+//       code: EErrors.INVALID_TYPE_ERROR,
+//     });
+//   }
+//   const result = await createProductService({ ...req.body });
+//   res.send(result);
+// };

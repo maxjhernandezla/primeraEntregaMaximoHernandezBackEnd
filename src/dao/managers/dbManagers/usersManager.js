@@ -1,8 +1,9 @@
 import usersModel from '../../models/users.model.js'
+import logger from "../../../middlewares/logger.js";
 
 export default class Users {
     constructor() {
-        console.log('Working users from DB');
+        logger.info('Working users from DB');
     }
 
     getAll = async () => {

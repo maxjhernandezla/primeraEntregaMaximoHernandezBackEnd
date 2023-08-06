@@ -1,8 +1,9 @@
+import logger from "../../../middlewares/logger.js";
 import cartModel from "../../models/carts.model.js";
 import productModel from "../../models/products.model.js";
 export default class Cart {
   constructor() {
-    console.log("Working carts with DB");
+    logger.info('Workig carts with DB')
   }
 
   getAll = async () => {

@@ -1,11 +1,11 @@
 import express from "express";
 import './dao/dbConfig.js'
-import productsRouter from "./routes/products.router.js";
+import ProductsRouter from "./routes/products.router.js";
 import CartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import messagesRouter from "./routes/messages.router.js";
 import handlebars from "express-handlebars";
-import { __dirname } from "./utils.js";
+import { __dirname } from "./utils/utils.js";
 import SessionsRouter from "./routes/sessions.router.js";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
@@ -16,13 +16,13 @@ import UsersRouter from "./routes/users.router.js";
 import LoggerRouter from "./routes/logger.router.js";
 import cors from 'cors'
 import errorHandler from './middlewares/errors/index.js'
-import { addLogger } from "./middlewares/logger.js";
+import logger, { addLogger } from "./middlewares/logger.js";
 
 const sessionsRouter = new SessionsRouter();
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
 const loggerRouter = new LoggerRouter();
-
+const productsRouter = new ProductsRouter()
 
 const app = express();
 
@@ -58,7 +58,7 @@ app.use(passport.session());
 app.use("/", viewsRouter);
 app.use("/api/users", usersRouter.getRouter());
 app.use("/api/sessions", sessionsRouter.getRouter());
-app.use("/api/products", productsRouter);
+app.use("/api/products", productsRouter.getRouter());
 app.use("/api/carts", cartsRouter.getRouter());
 app.use("/api/messages", messagesRouter);
 app.use("/api/logger", loggerRouter.getRouter());
@@ -66,7 +66,7 @@ app.use("/api/logger", loggerRouter.getRouter());
 
 app.use(errorHandler)
 
-app.listen(8080, () => console.log("Server running on port 8080"));
+app.listen(8080, () => logger.info('Server running on port 8080'));
 
 // const productManager = new ProductManager();
 // const messageManager = new MessageManager();

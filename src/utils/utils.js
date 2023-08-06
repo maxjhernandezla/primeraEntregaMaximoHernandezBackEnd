@@ -2,7 +2,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { PRIVATE_KEY } from "./config/constants.config.js";
+import { PRIVATE_KEY } from "../config/constants.config.js";
 import { faker } from "@faker-js/faker";
 
 const createHash = (password) =>

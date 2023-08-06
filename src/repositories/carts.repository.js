@@ -1,35 +1,36 @@
-import { CARTS_DAO } from "../dao/index.js";
-
 export default class CartsRepository {
+  constructor(dao) {
+    this.dao = dao
+  }
   getAll = async () => {
-    return await CARTS_DAO.getAll();
+    return await this.dao.getAll();
   };
 
   getById = async (id) => {
-    return await CARTS_DAO.getById(id);
+    return await this.dao.getById(id);
   };
 
   create = async () => {
-    return await CARTS_DAO.create();
+    return await this.dao.create();
   };
 
   update = async (id, cart) => {
-    return await CARTS_DAO.update(id, cart);
+    return await this.dao.update(id, cart);
   };
 
   updateQuantity = async (cart) => {
-    return await CARTS_DAO.updateQuantity(cart);
+    return await this.dao.updateQuantity(cart);
   };
 
   addToCart = async (cid, cart) => {
-    return await CARTS_DAO.addProductToCart(cid, cart);
+    return await this.dao.addProductToCart(cid, cart);
   };
 
   deleteAllProducts = async (cart) => {
-    return await CARTS_DAO.deleteAllProducts(cart);
+    return await this.dao.deleteAllProducts(cart);
   };
 
   deleteProductInCart = async (cart) => {
-    return await CARTS_DAO.deleteProductInCart(cart);
+    return await this.dao.deleteProductInCart(cart);
   };
 }

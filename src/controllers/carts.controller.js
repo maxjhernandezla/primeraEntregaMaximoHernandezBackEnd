@@ -1,21 +1,14 @@
-import {
-  getCarts as getCartsService,
-  getCartById as getCartByIdService,
-  addToCart as addToCartService,
-  createCart as createCartService,
-  updateCart as updateCartService,
-  updateQuantity as updateQuantityService,
-  deleteProductInCart as deleteProductInCartService,
-  deleteAllProductsInCart as deleteAllProductsInCartService,
-  purchase as purchaseService,
-} from "../services/carts.services.js";
+import * as cartsService from "../services/carts.services.js";
+import { CartNotFound, CartWithoutStock, ProductNotFound } from "../utils/custom-exceptions.js";
 
 const getCarts = async (req, res) => {
   try {
-    const carts = await getCartsService();
+    const carts = await cartsService.getCarts();
     res.sendSuccess(carts);
   } catch (error) {
-    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
@@ -23,10 +16,15 @@ const getCarts = async (req, res) => {
 const getCartById = async (req, res) => {
   try {
     const { cid } = req.params;
-    const cart = await getCartByIdService(cid);
+    const cart = await cartsService.getCartById(cid);
     res.sendSuccess(cart);
   } catch (error) {
-    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
+    if (error instanceof CartNotFound) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
@@ -34,10 +32,18 @@ const getCartById = async (req, res) => {
 const addToCart = async (req, res) => {
   try {
     const { cid, pid } = req.params;
-    const result = await addToCartService(cid, pid);
+    const result = await cartsService.addToCart(cid, pid);
     res.sendSuccess(result);
   } catch (error) {
-    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
+    if (error instanceof CartNotFound) {
+      return res.sendClientError(error.message);
+    }
+    if (error instanceof ProductNotFound) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
@@ -45,10 +51,12 @@ const addToCart = async (req, res) => {
 const createCart = async (req, res) => {
   try {
     const { products } = req.body;
-    const result = await createCartService(products);
+    const result = await cartsService.createCart(products);
     res.sendSuccess(result);
   } catch (error) {
-    req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
@@ -57,9 +65,15 @@ const updateCart = async (req, res) => {
   try {
     const { cid } = req.params;
     const { products, quantity } = req.body;
-    const result = await updateCartService(cid, { products, quantity });
+    const result = await cartsService.updateCart(cid, { products, quantity });
     res.sendSuccess(result);
   } catch (error) {
+    if (error instanceof CartNotFound) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
@@ -68,9 +82,18 @@ const updateQuantity = async (req, res) => {
   try {
     const { cid, pid } = req.params;
     const { quantity } = req.body;
-    const result = await updateQuantityService(cid, pid, quantity);
+    const result = await cartsService.updateQuantity(cid, pid, quantity);
     res.sendSuccess(result);
   } catch (error) {
+    if (error instanceof CartNotFound) {
+      return res.sendClientError(error.message);
+    }
+    if (error instanceof ProductNotFound) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
@@ -78,9 +101,18 @@ const updateQuantity = async (req, res) => {
 const deleteProductInCart = async (req, res) => {
   try {
     const { cid, pid } = req.params;
-    const result = await deleteProductInCartService(cid, pid);
+    const result = await cartsService.deleteProductInCart(cid, pid);
     res.sendSuccess(result);
   } catch (error) {
+    if (error instanceof CartNotFound) {
+      return res.sendClientError(error.message);
+    }
+    if (error instanceof ProductNotFound) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
@@ -88,9 +120,15 @@ const deleteProductInCart = async (req, res) => {
 const deleteAllProductsInCart = async (req, res) => {
   try {
     const { cid } = req.params;
-    const result = await deleteAllProductsInCartService(cid);
+    const result = await cartsService.deleteAllProductsInCart(cid);
     res.sendSuccess(result);
   } catch (error) {
+    if (error instanceof CartNotFound) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
@@ -99,9 +137,18 @@ const purchase = async (req, res) => {
   try {
     const { cid } = req.params;
     const user = req.user;
-    const result = await purchaseService(cid, user);
+    const result = await cartsService.purchase(cid, user);
     res.sendSuccess(result);
   } catch (error) {
+    if (error instanceof CartNotFound) {
+      return res.sendClientError(error.message);
+    }
+    if (error instanceof CartWithoutStock) {
+      return res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };

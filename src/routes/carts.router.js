@@ -18,7 +18,7 @@ export default class CartsRouter extends Router {
     this.get("/:cid", ["ADMIN"], passportStrategiesEnum.JWT, getCartById);
     this.post(
       "/:cid/products/:pid",
-      ["USER"],
+      ["USER", "ADMIN"],
       passportStrategiesEnum.JWT,
       addToCart
     );
@@ -32,16 +32,16 @@ export default class CartsRouter extends Router {
     );
     this.delete(
       "/:cid/products/:pid",
-      ["USER"],
+      ["USER", "ADMIN"],
       passportStrategiesEnum.JWT,
       deleteProductInCart
     );
     this.delete(
       "/:cid",
-      ["USER"],
+      ["USER", "ADMIN"],
       passportStrategiesEnum.JWT,
       deleteAllProductsInCart
     );
-    this.post("/:cid/purchase", ["USER"], passportStrategiesEnum.JWT, purchase);
+    this.post("/:cid/purchase", ["USER", "ADMIN"], passportStrategiesEnum.JWT, purchase);
   }
 }
