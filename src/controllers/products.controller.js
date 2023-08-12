@@ -1,5 +1,4 @@
 import * as productsService from "../services/products.services.js";
-import { generateMockProduct } from "../utils/utils.js";
 import {
   IncompleteValues,
   ProductNotFound,
@@ -15,7 +14,7 @@ const getProducts = async (req, res) => {
       category,
       status,
     });
-    res.send(products);
+    res.sendSuccess(products);
   } catch (error) {
     req.logger.error(
       `ERROR => date: ${new Date()} - message: ${error.message}`
@@ -28,7 +27,7 @@ const getProductById = async (req, res) => {
   try {
     const { pid } = req.params;
     const result = await productsService.getProductById(pid);
-    res.send(result);
+    res.sendSuccess(result);
   } catch (error) {
     if (error instanceof ProductNotFound) {
       return res.sendClientError(error.message);
@@ -90,28 +89,12 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-const getMocksProducts = async (req, res) => {
-  try {
-    let products = [];
-    for (let i = 0; i < 100; i++) {
-      products.push(generateMockProduct());
-    }
-    res.send(products);
-  } catch (error) {
-    req.logger.error(
-      `ERROR => date: ${new Date()} - message: ${error.message}`
-    );
-    console.log(error.message);
-  }
-};
-
 export {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
-  getMocksProducts,
 };
 
 // {

@@ -7,26 +7,19 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  getMocksProducts,
 } from "../controllers/products.controller.js";
 
 export default class ProductsRouter extends Router {
   init() {
     this.get(
-      "/mockingproducts",
-      ["ADMIN"],
-      passportStrategiesEnum.JWT,
-      getMocksProducts
-    );
-    this.get(
       "/",
-      ["PUBLIC", "USER", "ADMIN"],
+      ["PUBLIC"],
       passportStrategiesEnum.NOTHING,
       getProducts
     );
     this.get(
       "/:pid",
-      ["PUBLIC", "USER", "ADMIN"],
+      ["PUBLIC"],
       passportStrategiesEnum.NOTHING,
       getProductById
     );

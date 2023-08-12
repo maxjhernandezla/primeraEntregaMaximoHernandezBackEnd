@@ -23,7 +23,6 @@ const registerEmail = async (user) => {
 };
 
 const purchaseEmail = async (ticket) => {
-  console.log(ticket);
   await transporter.sendMail({
     from: "Max Shoes customer service",
     to: `${ticket.purchaser}`,

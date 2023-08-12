@@ -1,4 +1,3 @@
-import { CARTS_DAO, PRODUCTS_DAO } from "../dao/index.js";
 import { createTicket as createTicketService } from "./tickets.service.js";
 import CartsRepository from "../repositories/carts.repository.js";
 import * as productsService from './products.services.js'
@@ -31,7 +30,7 @@ const updateCart = async (cid, cart) => {
   if (!exists) {
     throw new CartNotFound('Cart not found')
   }
-  const result = await CARTS_DAO.update(cid, cart);
+  const result = await cartsRepository.update(cid, cart);
   return result;
 };
 
@@ -67,7 +66,7 @@ const updateQuantity = async (cid, pid, quantity) => {
   if (productInCart !== -1) {
     cart.products[productInCart].quantity += quantity;
   }
-  const result = await CARTS_DAO.updateQuantity(cart);
+  const result = await cartsRepository.updateQuantity(cart);
   return result;
 };
 
@@ -114,7 +113,7 @@ const purchase = async (cid, user) => {
     if (product.stock >= quantity) {
       amount += quantity * product.price;
       product.stock -= quantity;
-      await PRODUCTS_DAO.update(product._id, product);
+      await productsService.updateProduct(product._id, product);
     } else {
       productsWithoutStock.push({ product, quantity });
     }
@@ -146,9 +145,3 @@ export {
   purchase,
 };
 
-// console.log(cart);
-// const purchaser = user;
-// const ticket = {
-//   cart, purchaser
-// }
-// return ticket

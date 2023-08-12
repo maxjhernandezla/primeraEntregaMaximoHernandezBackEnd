@@ -59,11 +59,11 @@ export default class Router {
         if (strategy === passportStrategiesEnum.JWT) {
             passport.authenticate(strategy, function (err, user, info) {
                 if (err) return next(err);
-
+                
                 if (!user)
-                    return res.status(401).send({
-                        error: info.messages ? info.messages : info.toString()
-                    })
+                return res.status(401).send({
+                    error: info.messages ? info.messages : info.toString()
+                })
                 req.user = user;
                 next();
             })(req, res, next);
@@ -74,12 +74,9 @@ export default class Router {
 
     handlePolicies = (policies) => (req, res, next) => {
         if (policies[0] === 'PUBLIC') return next();
-
         const user = req.user;
-
         if (!policies.includes(user.role.toUpperCase()))
             return res.status(403).json({ message: 'Forbidden' })
-        
         next();
     }
 

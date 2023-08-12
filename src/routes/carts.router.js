@@ -15,7 +15,7 @@ import {
 export default class CartsRouter extends Router {
   init() {
     this.get("/", ["ADMIN"], passportStrategiesEnum.JWT, getCarts);
-    this.get("/:cid", ["ADMIN"], passportStrategiesEnum.JWT, getCartById);
+    this.get("/:cid", ["ADMIN", "USER"], passportStrategiesEnum.JWT, getCartById);
     this.post(
       "/:cid/products/:pid",
       ["USER", "ADMIN"],

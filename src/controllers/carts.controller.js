@@ -64,8 +64,8 @@ const createCart = async (req, res) => {
 const updateCart = async (req, res) => {
   try {
     const { cid } = req.params;
-    const { products, quantity } = req.body;
-    const result = await cartsService.updateCart(cid, { products, quantity });
+    const { products } = req.body;
+    const result = await cartsService.updateCart(cid, products);
     res.sendSuccess(result);
   } catch (error) {
     if (error instanceof CartNotFound) {

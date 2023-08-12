@@ -59,6 +59,5 @@ socket.on("showProducts", (data) => {
 });
 
 function getId(id) {
-  console.log(id);
   socket.emit("deleteProduct", id);
 }

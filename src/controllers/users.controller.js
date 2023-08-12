@@ -1,3 +1,4 @@
+import { config } from "dotenv";
 import * as usersService from "../services/users.services.js";
 import {
   IncorrectLoginCredentials,
@@ -10,9 +11,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await usersService.getUserByEmail(email);
     const accessToken = await usersService.login(password, user);
-    req.logger.info(
-      `INFO => date: ${new Date()} - message: ${user.email} logged in`
-    );
+    res.cookie("sessionCookie", accessToken, { maxAge: 60 * 60 * 100, httpOnly: true });
     res.sendSuccess({ accessToken });
   } catch (error) {
     if (error instanceof UserNotFound) {

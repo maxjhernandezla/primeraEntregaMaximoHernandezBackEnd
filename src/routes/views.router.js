@@ -1,5 +1,4 @@
-import { Router } from "express";
-import { publicAccess, privateAccess } from "../middlewares/middlewares.js";
+import Router from "./router.js";
 import {
   getProducts,
   getProductById,
@@ -8,30 +7,28 @@ import {
   reset,
   register,
 } from "../controllers/views.controller.js";
-const router = Router();
+import { passportStrategiesEnum } from "../config/enums.config.js";
 
-router.get("/", (req, res) => {
-  res.render("index");
-});
-
-router.get("/products", privateAccess, getProducts);
-
-router.get("/products/:pid", privateAccess, getProductById);
-
-router.get("/carts/:cid", privateAccess, getCartById);
-
-router.get("/login", publicAccess, login);
-
-router.get("/register", publicAccess);
-
-router.get("/reset", publicAccess, reset);
-
-export default router;
-
-// router.get("/realtimeproducts", async (req, res) => {
-//   const products = await productManager.getAll();
-//   res.render("realTimeProducts", { products });
-// });
+export default class ViewsRouter extends Router {
+  init() {
+    this.get("/login", ["PUBLIC"], passportStrategiesEnum.NOTHING, login);
+    this.get("/register", ["PUBLIC"], passportStrategiesEnum.NOTHING, register);
+    this.get(
+      "/products",
+      ["PUBLIC"],
+      passportStrategiesEnum.NOTHING,
+      getProducts
+    );
+    this.get(
+      "/products/:pid",
+      ["PUBLIC"],
+      passportStrategiesEnum.NOTHING,
+      getProductById
+    );
+    this.get("/carts/:cid", ["USER", "ADMIN"], passportStrategiesEnum.JWT, getCartById);
+    this.get("/reset", ["PUBLIC"], passportStrategiesEnum.NOTHING, reset);
+  }
+}
 
 // router.get("/messages", (req, res) => {
 //   res.render("messages");

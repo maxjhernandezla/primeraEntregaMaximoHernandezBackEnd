@@ -1,0 +1,218 @@
+paths:
+  /api/products:
+    get: 
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200": 
+          description: Los productos se obtuvieron correctamente de la BDD.
+          content:
+            aplication/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Product'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD.
+    post:
+      summary: Inserta un nuevo producto en la BDD.
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+              schema: 
+                  $ref: '#/components/requestBodies/addProduct'
+      responses:
+        "200": 
+          description: El producto se ingresó correctamente en la BDD.
+          content: 
+            application/json:
+              schema: 
+                  $ref: '#/components/schemas/Product'
+        "400":
+          description: Datos incompletos del producto.
+        "403":
+          description: No tiene los permisios para realizar esta acción.
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD.
+  
+  /api/products/{pid}:
+    get:
+      summary: Obtiene un producto por su id.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: El Id del producto.
+          schema: 
+            type: String
+      responses:
+        "200": 
+          description: El producto se obtuvo de manera exitosa.
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: El producto no se encontró en la base de datos.
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD.
+    put: 
+      summary: Obtiene un producto por su id.
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - name: pid
+          in: path
+          required: true
+          description: El Id del producto. 
+          schema: 
+            type: String
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+              schema: 
+                  $ref: '#/components/requestBodies/addProduct'
+      responses:
+        "200": 
+          description: El producto se obtuvo de manera exitosa.
+        "400":
+          description: Datos incompletos del producto.
+        "403":
+          description: No tiene los permisios para realizar esta acción.
+        "404":
+          description: El producto no se encontró en la base de datos.
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD.
+    delete:
+      summary: Obtiene un producto por su id.
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/token'
+        - name: pid
+          in: path
+          required: true
+          description: El Id del producto. 
+          schema: 
+            type: String
+      responses:
+        "200": 
+          description: El producto se eliminó de manera exitosa.
+        "403":
+          description: No tiene los permisios para realizar esta acción.
+        "404":
+          description: El producto no se encontró en la base de datos.
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD.
+
+components:
+  parameters:
+    token:
+      in: header
+      name: token
+      description: Token de autenticación en API.
+      required: true
+      schema:
+        type: string
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id: 
+          type: String
+          description: Id autogenerado por mongodb.
+        title: 
+          type: String
+          description: Titulo del producto.
+        description: 
+          type: String
+          description: Descripción del producto.
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Cantidad de stock del producto.
+        code:
+          type: String
+          description: Código único generado por el usuario.
+        category:
+          type: String
+          description: Categoría a la que pertenece el producto.
+        owner:
+          type: String
+          description: ObjectId del usuario creador del producto.
+        image:
+          type: String
+          description: Ruta con la/s imagen/es del producto.
+        status:
+          type: Boolean
+          description: Estado del producto.
+        brand:
+          type: String
+          description: Marca del producto.
+      example: 
+        _id: ObjectId("6466d9cbb6e0dc3695a3d8e6")
+        title: Air Jordan 1 Mid
+        brand: Nike
+        description: Inspired by the original AJ1, the Air Jordan 1 Mid offers fans a chance to follow in MJ's footsteps. Fresh color trims the clean, classic materials, imbuing modernity into a classic design.
+        price: 300
+        thumbnail: AirJordan1.jpg
+        code: AA00001
+        stock: 20
+        category: Jordan
+        status: true
+        owner: admin
+
+  requestBodies:
+    addProduct:
+      type: Object
+      properties:
+        title: 
+          type: String
+          description: Titulo del producto.
+        description: 
+          type: String
+          description: Descripción del producto.
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Cantidad de stock del producto.
+        code:
+          type: String
+          description: Código único generado por el usuario.
+        category:
+          type: String
+          description: Categoría a la que pertenece el producto.
+        owner:
+          type: String
+          description: ObjectId del usuario creador del producto.
+        image:
+          type: String
+          description: Ruta con la/s imagen/es del producto.
+        status:
+          type: Boolean
+          description: Estado del producto.
+        brand:
+          type: String
+          description: Marca del producto.
+      example: 
+        title: Air Jordan 1 Mid
+        brand: Nike
+        description: Inspired by the original AJ1, the Air Jordan 1 Mid offers fans a chance to follow in MJ's footsteps. Fresh color trims the clean, classic materials, imbuing modernity into a classic design.
+        price: 300
+        thumbnail: AirJordan1.jpg
+        code: AA00001
+        stock: 20
+        category: Jordan

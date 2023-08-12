@@ -41,7 +41,11 @@ const getCartById = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  res.render("login");
+  try {
+    res.render("login");
+  } catch (error) {
+    res.send(500).json({ status: "error", error });
+  }
 };
 
 const register = async (req, res) => {

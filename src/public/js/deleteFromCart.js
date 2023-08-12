@@ -5,9 +5,7 @@ deleteFromCart = async (e) => {
       `/api/carts/6468f3396c3a9260d3ef7a49/products/${pid}`,
       { method: "DELETE" }
     );
-    console.log(res);
     let message = await res;
-    console.log(message);
     if (message.status === 200) {
       Swal.fire({
         position: "top-end",

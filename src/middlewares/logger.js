@@ -51,7 +51,7 @@ if (ENVIROMENT === "production") {
         transports: [
           new winston.transports.Console({
             level: "debug",
-            format: winston.format.combine(
+            format :winston.format.combine(
               winston.format.colorize({
                 all: true,
                 colors: customLevelOptions.colors,

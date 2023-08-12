@@ -8,5 +8,5 @@ try {
     await mongoose.connect(MONGO_URL);
     logger.info('*** Conectado a la BDD ***')
 } catch (error) {
-    console.log(error);
+    logger.error(error);
 }

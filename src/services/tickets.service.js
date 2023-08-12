@@ -7,7 +7,7 @@ import {
 } from "../mailing/mailing.js";
 
 const createTicket = async (purchaser, amount, productsWithoutStock) => {
-  const purchase_datetime = Date.now();
+  const purchase_datetime = new Date().toISOString()
   const code = uuidv4();
   const ticket = {
     purchaser,
@@ -15,13 +15,13 @@ const createTicket = async (purchaser, amount, productsWithoutStock) => {
     code,
     purchase_datetime,
   };
-  if (productsWithoutStock.length > 0 && amount === 0) {
-    await noStockEmail(purchaser);
-  } else if (productsWithoutStock.length === 0 && amount > 0) {
-    await purchaseEmail(ticket);
-  } else if (productsWithoutStock.length > 0 && amount > 0) {
-    await purchaseEmailAndNoStock(ticket);
-  }
+  // if (productsWithoutStock.length > 0 && amount === 0) {
+  //   await noStockEmail(purchaser);
+  // } else if (productsWithoutStock.length === 0 && amount > 0) {
+  //   await purchaseEmail(ticket);
+  // } else if (productsWithoutStock.length > 0 && amount > 0) {
+  //   await purchaseEmailAndNoStock(ticket);
+  // }
   const result = TICKETS_DAO.create(ticket);
   return result;
 };

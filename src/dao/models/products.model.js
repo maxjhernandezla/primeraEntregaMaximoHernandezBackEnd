@@ -20,7 +20,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  image: String,
+  image: {
+    type: Array,
+    default: []
+  },
   category: {
     type: String,
     require: true,
@@ -34,6 +37,10 @@ const productSchema = new mongoose.Schema({
     unique: true,
   },
   status: Boolean,
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    require: true
+  }
 });
 
 productSchema.plugin(mongoosePaginate);

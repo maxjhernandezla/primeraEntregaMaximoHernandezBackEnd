@@ -1,0 +1,279 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - Carts
+      parameters:
+        - $ref: "#/components/parameters/token"
+      responses:
+        "200":
+          description: Los carritos se obtuvieron correctamente de la BDD.
+          content:
+            aplication/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Cart"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    post:
+      summary: Crea un nuevo carrito
+      tags:
+        - Carts
+      parameters:
+        - $ref: "#/components/parameters/token"
+      responses:
+        "200":
+          description: El carrito se creó correctamente en la BDD.
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /api/carts/{cid}:
+    get:
+      summary: Busca un carrito por su ID.
+      tags:
+        - Carts
+      parameters:
+        - $ref: "#/components/parameters/token"
+        - $ref: "#/components/parameters/cid"
+      responses:
+        "200":
+          description: El carrito se obtuvo correctamente de la BDD.
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    put:
+      summary: Actualiza un carrito por su ID.
+      tags:
+        - Carts
+      parameters:
+        - $ref: "#/components/parameters/token"
+        - $ref: "#/components/parameters/cid"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/UpdateCart"
+      responses:
+        "200":
+          description: El carrito se actualizó correctamente en la BDD.
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      summary: Elimina todos los productos de un carrito.
+      tags:
+        - Carts
+      parameters:
+        - $ref: "#/components/parameters/token"
+        - $ref: "#/components/parameters/cid"
+      responses:
+        "200":
+          description: El carrito se eliminó correctamente de la BDD.
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Agrega un producto al carrito.
+      tags:
+        - Carts
+      parameters:
+        - $ref: "#/components/parameters/token"
+        - $ref: "#/components/parameters/cid"
+        - $ref: "#/components/parameters/pid"
+      responses:
+        "200":
+          description: El producto se agregó al carrito correctamente.
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    put:
+      summary: Se modifica la cantidad de un producto en el carrito.
+      tags:
+        - Carts
+      parameters:
+        - $ref: "#/components/parameters/token"
+        - $ref: "#/components/parameters/cid"
+        - $ref: "#/components/parameters/pid"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/UpdateQuantity"
+      responses:
+        "200":
+          description: La cantidad del producto se modificó correctamente.
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      summary: Se elimina un producto del carrito.
+      tags:
+        - Carts
+      parameters:
+        - $ref: "#/components/parameters/token"
+        - $ref: "#/components/parameters/cid"
+        - $ref: "#/components/parameters/pid"
+      responses:
+        "200":
+          description: El producto se elminó correctamente.
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Confirma la compra de un carrito
+      tags:
+        - Carts
+      parameters:
+        - $ref: "#/components/parameters/token"
+        - $ref: "#/components/parameters/cid"
+      responses:
+        "200":
+          description: La compra se realizó correctamente.
+          content:
+            aplication/json:
+              schema:
+                $ref: "#/components/schemas/Ticket"
+
+components:
+  responses:
+    Unauthorized:
+      description: (Unauthorized) No tiene los permisios para realizar esta acción.
+    NotFound:
+      description: (NotFound) No se encontró la información solicitada.
+    BadRequest:
+      description: (Bad Request) Los datos enviados son incorrectos o hay datos obligatorios no enviados
+    ServerError:
+      description: (Server Error) Error interno del servidor, usualmente generado por una query defectuosa o fallo en la conexión a la BDD.
+  parameters:
+    pid:
+      in: path
+      name: pid
+      required: true
+      description: El Id del producto.
+      schema:
+        type: String
+    cid:
+      in: path
+      name: cid
+      required: true
+      description: El Id del carrito.
+      schema:
+        type: String
+    token:
+      in: header
+      name: token
+      description: token de autenticación de API.
+      required: true
+      schema:
+        type: String
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: String
+          description: Id autogenerado por mongodb.
+        products:
+          type: Array
+          description: Lista de productos
+          items:
+            type: object
+            properties:
+              pid:
+                type: String
+                description: ObjectId del producto
+              quantity:
+                type: Number
+                description: Cantidad de unidades del producto
+      example:
+        _id: ObjectId("asETDFG1234jnuhg8fd.214asFSDE3")
+        products:
+          - pid: ObjectId("64010a6571f4e310587dbb00")
+            quantity: 5
+          - pid: ObjectId("645ad03732d3d81586ef6968")
+            quantity: 1
+          - pid: ObjectId("645ad04032d3d81586ef6974")
+            quantity: 1
+    Ticket:
+      type: object
+      properties:
+        code:
+          type: String
+          description: Codigo único del ticket generado por uuid.
+        _id:
+          type: String
+          description: Id autogenerado por mongodb.
+        purchase_datetime:
+          type: String
+          description: Hora exacta en la que fue generado el ticket.
+        amount:
+          type: Number
+          description: Precio total de la compra.
+        purchaser:
+          type: String
+          description: Email del comprador.
+      example:
+        _id: ObjectId("asETDFG1234jnuhg8fd.214asFSDE3")
+        code: "950ba25c-e8df-4eb6-8d81-2e4d5563a22b"
+        amount: 350000
+        purchase_datetime: "2023-08-12T17:57:31.530Z"
+        purchaser: "test@test.com"
+  requestBodies:
+    UpdateCart:
+      type: Array
+      description: Lista de productos
+      items:
+        type: object
+        properties:
+          pid:
+            type: String
+            description: ObjectId del producto
+          quantity:
+            type: Number
+            description: Cantidad de unidades del producto
+      example:
+        - pid: ObjectId("64010a6571f4e310587dbb00")
+          quantity: 5
+        - pid: ObjectId("645ad03732d3d81586ef6968")
+          quantity: 1
+        - pid: ObjectId("645ad04032d3d81586ef6974")
+          quantity: 1
+    UpdateQuantity:
+      type: object
+      description: Cantidad del producto que se quiere agregar.
+      properties:
+        quantity:
+          type: Number
+          description: Cantidad de unidades del producto
+      example:
+        quantity: 5
