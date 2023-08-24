@@ -6,53 +6,11 @@ import {
   UserNotFound,
 } from "../utils/custom-exceptions.js";
 
-const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await usersService.getUserByEmail(email);
-    const accessToken = await usersService.login(password, user);
-    res.cookie("sessionCookie", accessToken, { maxAge: 60 * 60 * 100, httpOnly: true });
-    res.sendSuccess({ accessToken });
-  } catch (error) {
-    if (error instanceof UserNotFound) {
-      return res.sendClientError(error.message);
-    }
-    if (error instanceof IncorrectLoginCredentials) {
-      return res.sendClientError(error.message);
-    }
-    req.logger.error(
-      `ERROR => date: ${new Date()} - message: ${error.message}`
-    );
-    res.sendServerError(error.message);
-  }
-};
-
-const register = async (req, res) => {
-  try {
-    const { first_name, last_name, email, age, password, role } = req.body;
-    if (!first_name || !last_name || !email || !age || !password || !role)
-      return res.sendClientError("incomplete credentials");
-    await usersService.getUserByEmailRegister(email);
-    const register = await usersService.register({ ...req.body });
-    req.logger.info(
-      `INFO => date: ${new Date()} - message: new user registered`
-    );
-    res.sendSuccess(register);
-  } catch (error) {
-    if (error instanceof UserAlreadyExists) {
-      return res.sendClientError(error.message);
-    }
-    req.logger.error(
-      `ERROR => date: ${new Date()} - message: ${error.message}`
-    );
-    res.sendServerError(error.message);
-  }
-};
 
 const getUserByEmail = async (req, res) => {
   try {
     const { email } = req.body;
-    const result = await getUserByEmailService(email);
+    const result = await usersService.getUserByEmail(email);
     res.sendSuccess(result);
   } catch (error) {
     if (error instanceof UserNotFound) {
@@ -77,7 +35,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-export { login, register, getUserByEmail, getAllUsers };
+export { getUserByEmail, getAllUsers };
 
 // const login = async (req, res) => {
 //   try {

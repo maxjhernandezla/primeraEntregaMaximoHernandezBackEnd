@@ -5,13 +5,15 @@ form.addEventListener("submit", async (e) => {
   const data = new FormData(form);
   const obj = {};
   data.forEach((value, key) => (obj[key] = value));
-  await fetch("api/users/login", {
+  await fetch("api/sessions/login", {
     method: "POST",
     body: JSON.stringify(obj),
     headers: {
       "Content-Type": "application/json",
     },
+  }).then((res) => {
+    if (res.status === 200) {
+      window.location.href = "/products";
+    }
   });
-  form.reset();
-  window.location.href = "/products";
 });

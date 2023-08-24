@@ -63,4 +63,16 @@ const noStockEmail = async (purchaser) => {
   });
 };
 
-export { registerEmail, purchaseEmail, noStockEmail, purchaseEmailAndNoStock };
+const recoverPasswordEmail = async (email, url) => {
+  await transporter.sendMail({
+    from: "Max Shoes customer service",
+    to: `${email}`,
+    subject: "Recupera tu contraseña.",
+    html: `<h1>Max Shoes</h1>
+    <h3>Recupera tu contraseña</h3>
+    <p>Entra a este <a href=${url}>enlace</a> para recuperar tu contraseña.</p>
+    <h3>Muchas gracias!</h3>`,
+  });
+};
+
+export { registerEmail, purchaseEmail, noStockEmail, purchaseEmailAndNoStock, recoverPasswordEmail };

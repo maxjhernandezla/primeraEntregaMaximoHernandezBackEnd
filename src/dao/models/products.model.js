@@ -39,7 +39,8 @@ const productSchema = new mongoose.Schema({
   status: Boolean,
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    require: true
+    require: true,
+    default: null
   }
 });
 

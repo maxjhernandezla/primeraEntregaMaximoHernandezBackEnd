@@ -13,4 +13,8 @@ export default class UsersRepository {
   getAll = async () => {
     return await this.dao.getAll();
   };
+
+  update = async (user) => {
+    return await this.dao.update(user)
+  }
 }

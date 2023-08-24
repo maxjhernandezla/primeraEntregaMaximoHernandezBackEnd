@@ -52,8 +52,12 @@ const register = async (req, res) => {
   res.render("register");
 };
 
-const reset = async (req, res) => {
-  res.render("reset");
+const resetPassword = async (req, res) => {
+  res.render("resetPassword");
 };
 
-export { getProducts, getProductById, getCartById, login, register, reset };
+const recoverPassword = async (req, res) => {
+  res.render("recoverPassword")
+}
+
+export { getProducts, getProductById, getCartById, login, register, resetPassword, recoverPassword };

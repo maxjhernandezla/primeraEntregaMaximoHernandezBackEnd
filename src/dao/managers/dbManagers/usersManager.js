@@ -21,4 +21,8 @@ export default class Users {
         return result
     }
 
+    update = async (user) => {
+        const result = await usersModel.updateOne({ _id: user._id }, user)
+        return result
+    }
 }

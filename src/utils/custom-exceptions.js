@@ -46,3 +46,24 @@ export class IncompleteValues extends Error {
         this.name = this.constructor.name;
     }
 }
+
+export class isOldPasswordError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}
+
+export class ExpiredJWT extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}
+
+export class EmailNotMatchToken extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}

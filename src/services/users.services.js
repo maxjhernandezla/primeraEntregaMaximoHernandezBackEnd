@@ -37,33 +37,15 @@ const getAllUsers = async () => {
   return users;
 };
 
-const login = async (password, user) => {
-  const comparePassword = isValidPassword(user, password);
-  if (!comparePassword) {
-    throw new IncorrectLoginCredentials("Incorrect credentials");
-  }
-  const dtoUser = new UserDto(user);
-  const accessToken = generateToken(dtoUser);
-  return accessToken;
-};
-
-const register = async (user) => {
-  const hashedPassword = createHash(user.password);
-  user.password = hashedPassword;
-  if (user.role === 'user') {
-    const cart = await cartsService.createCart()
-    user.cart = cart
-  }
-  const result = await usersRepository.save(user);
-  //await registerEmail(user)
-  return result;
-};
+const updateUser = async (user) => {
+  const result = await usersRepository.update(user)
+  return result
+}
 
 export {
   getUserByEmail,
   createUser,
   getAllUsers,
-  login,
   getUserByEmailRegister,
-  register,
+  updateUser
 };

@@ -4,8 +4,9 @@ import {
   getProductById,
   getCartById,
   login,
-  reset,
+  resetPassword,
   register,
+  recoverPassword
 } from "../controllers/views.controller.js";
 import { passportStrategiesEnum } from "../config/enums.config.js";
 
@@ -26,7 +27,8 @@ export default class ViewsRouter extends Router {
       getProductById
     );
     this.get("/carts/:cid", ["USER", "ADMIN"], passportStrategiesEnum.JWT, getCartById);
-    this.get("/reset", ["PUBLIC"], passportStrategiesEnum.NOTHING, reset);
+    this.get("/recoverpassword", ["PUBLIC"], passportStrategiesEnum.NOTHING, recoverPassword)
+    this.get("/resetpassword/:uid", ["PUBLIC"], passportStrategiesEnum.NOTHING, resetPassword);
   }
 }
 
