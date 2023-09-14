@@ -6,7 +6,7 @@ import config from "../config/dotenv.config.js";
 import { faker } from "@faker-js/faker";
 import path from "path";
 import { EmailNotMatchToken, ExpiredJWT } from "./custom-exceptions.js";
-
+import multer from "multer";
 
 const createHash = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -38,31 +38,55 @@ const generateMockProduct = () => {
 };
 
 const verifyToken = (token) => {
-  const verifiedToken = jwt.verify(token, config.privateKey, (error, decoded) => {
-    if (error) {
-      throw new ExpiredJWT("The token has expired, please generate a new one.");
-    } 
-    return decoded
-  });
-  return verifiedToken
+  const verifiedToken = jwt.verify(
+    token,
+    config.privateKey,
+    (error, decoded) => {
+      if (error) {
+        throw new ExpiredJWT(
+          "The token has expired, please generate a new one."
+        );
+      }
+      return decoded;
+    }
+  );
+  return verifiedToken;
 };
 
 const tokenExpired = (token) => {
   const currentTime = Math.floor(Date.now() / 1000);
   if (token.exp && currentTime >= token.exp) {
     throw new ExpiredJWT("The token has expired, please generate a new one.");
-  } 
+  }
 };
 
 const verifyEmail = (token, email) => {
   if (token.user.email !== email) {
-    throw new EmailNotMatchToken("The requested email doesn't match the user's email")
+    throw new EmailNotMatchToken(
+      "The requested email doesn't match the user's email"
+    );
   }
-}
+};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const __mainDirname = path.join(__dirname, "..");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const { type } = req.headers;
+    if (type === "products") cb(null, `${__mainDirname}/public/img/products`);
+    if (type === "profile") cb(null, `${__mainDirname}/public/img/profile`);
+    if (type === "documents") cb(null, `${__mainDirname}/public/img/documents`);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const uploader = multer({
+  storage,
+});
 
 export {
   __mainDirname,
@@ -73,5 +97,6 @@ export {
   generateMockProduct,
   recoverPasswordToken,
   verifyToken,
-  verifyEmail
+  verifyEmail,
+  uploader,
 };

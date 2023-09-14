@@ -1,8 +1,11 @@
 import { Products } from "../dao/factory.js";
+import { productEliminated } from "../mailing/mailing.js";
 import ProductsRepository from "../repositories/products.repository.js";
+import UsersRepository from "../repositories/users.repository.js";
 import {
   IncompleteValues,
   ProductNotFound,
+  CantDeleteProduct
 } from "../utils/custom-exceptions.js";
 
 const productsDAO = new Products();
@@ -47,7 +50,7 @@ const getProductById = async (id) => {
   return product;
 };
 
-const createProduct = async (product) => {
+const createProduct = async (product, user) => {
   if (
     !product.title ||
     !product.description ||
@@ -58,6 +61,10 @@ const createProduct = async (product) => {
   ) {
     throw new IncompleteValues("Incomplete values");
   }
+  if(!product.status) {
+    product.status = true;
+  }
+  if (user.role === 'premium') product.owner = user.email;
   const result = await productsRepository.create(product);
   return result;
 };
@@ -72,7 +79,7 @@ const updateProduct = async (id, product) => {
     !product.description ||
     !product.price ||
     !product.category ||
-    !product.stock ||
+    product.stock === undefined ||
     !product.code
   ) {
     throw new IncompleteValues("Incomplete values");
@@ -81,13 +88,20 @@ const updateProduct = async (id, product) => {
   return result;
 };
 
-const deleteProduct = async (id) => {
-  const exists = await productsRepository.getById(id);
-  if (!exists) {
+const deleteProduct = async (id, user) => {
+  const product = await productsRepository.getById(id);
+  if (!product) {
     throw new ProductNotFound("Product not found");
   }
-  const result = await productsRepository.delete(id);
-  return result;
+  if (user.role === "admin" || user.email === product.owner) {
+    if(product.owner !== 'admin') {
+      productEliminated(product.owner)
+    }
+    const result = await productsRepository.delete(id);
+    return result;
+  } else {
+    throw new CantDeleteProduct('You do not have the authorization to delete this product');
+  }
 };
 
 export {

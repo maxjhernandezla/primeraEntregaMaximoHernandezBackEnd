@@ -115,3 +115,60 @@
 {"level":"error","message":"ERROR => date: Thu Aug 24 2023 17:27:02 GMT-0300 (Argentina Standard Time) - message: E11000 duplicate key error collection: testingecommerce2.products index: code_1 dup key: { code: \"AAA118\" }"}
 {"level":"error","message":"ERROR => date: Thu Aug 24 2023 17:27:32 GMT-0300 (Argentina Standard Time) - message: E11000 duplicate key error collection: testingecommerce2.products index: code_1 dup key: { code: \"AAA118\" }"}
 {"level":"error","message":"ERROR => date: Thu Aug 24 2023 17:49:40 GMT-0300 (Argentina Standard Time) - message: User not found"}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 14:45:43 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"1@test.com\" (type string) at path \"_id\" for model \"users\""}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 14:46:06 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"m@test.com\" (type string) at path \"_id\" for model \"users\""}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 15:38:12 GMT-0300 (Argentina Standard Time) - message: products validation failed: owner: Cast to ObjectId failed for value \"admin\" (type string) at path \"owner\" because of \"BSONError\""}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 15:39:18 GMT-0300 (Argentina Standard Time) - message: products validation failed: owner: Cast to ObjectId failed for value \"admin\" (type string) at path \"owner\" because of \"BSONError\""}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 15:39:45 GMT-0300 (Argentina Standard Time) - message: products validation failed: owner: Cast to ObjectId failed for value \"admin\" (type string) at path \"owner\" because of \"BSONError\""}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 15:51:19 GMT-0300 (Argentina Standard Time) - message: User not found"}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 15:52:10 GMT-0300 (Argentina Standard Time) - message: email is not defined"}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 15:59:24 GMT-0300 (Argentina Standard Time) - message: E11000 duplicate key error collection: entregapremium.products index: code_1 dup key: { code: \"AAA114\" }"}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 16:15:15 GMT-0300 (Argentina Standard Time) - message: OwnerCantAddProduct is not defined"}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 16:15:58 GMT-0300 (Argentina Standard Time) - message: You are the owner of this product so you can not add it to your cart"}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 16:26:40 GMT-0300 (Argentina Standard Time) - message: admin is not defined"}
+{"level":"error","message":"ERROR => date: Sat Aug 26 2023 19:40:25 GMT-0300 (Argentina Standard Time) - message: Cannot access 'now' before initialization"}
+{"level":"error","message":"ERROR => date: Sat Sep 02 2023 13:56:35 GMT-0300 (Argentina Standard Time) - message: array is not defined"}
+{"level":"error","message":"ERROR => date: Sat Sep 02 2023 13:59:43 GMT-0300 (Argentina Standard Time) - message: Converting circular structure to JSON\n    --> starting at object with constructor 'Socket'\n    |     property 'parser' -> object with constructor 'HTTPParser'\n    --- property 'socket' closes the circle"}
+{"level":"error","message":"ERROR => date: Sat Sep 02 2023 13:59:59 GMT-0300 (Argentina Standard Time) - message: Converting circular structure to JSON\n    --> starting at object with constructor 'Socket'\n    |     property 'parser' -> object with constructor 'HTTPParser'\n    --- property 'socket' closes the circle"}
+{"level":"error","message":"ERROR => date: Sat Sep 02 2023 14:18:59 GMT-0300 (Argentina Standard Time) - message: array is not defined"}
+{"level":"error","message":"ERROR => date: Sat Sep 02 2023 16:36:19 GMT-0300 (Argentina Standard Time) - message: You must upload all your documentation to become a premium user"}
+{"level":"error","message":"ERROR => date: Sat Sep 02 2023 16:36:53 GMT-0300 (Argentina Standard Time) - message: User not found"}
+{"level":"error","message":"ERROR => date: Sat Sep 02 2023 17:04:09 GMT-0300 (Argentina Standard Time) - message: You did not attach any document"}
+{"level":"error","message":"ERROR => date: Sat Sep 02 2023 17:05:52 GMT-0300 (Argentina Standard Time) - message: You did not attach any document"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 13:59:58 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:03:09 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:05:13 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:06:33 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:14:15 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:14:40 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:15:31 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:15:48 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:16:27 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:16:58 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:23:05 GMT-0300 (Argentina Standard Time) - message: The token has expired, please generate a new one."}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:23:09 GMT-0300 (Argentina Standard Time) - message: The token has expired, please generate a new one."}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:24:04 GMT-0300 (Argentina Standard Time) - message: The token has expired, please generate a new one."}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 14:28:04 GMT-0300 (Argentina Standard Time) - message: token is not defined"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:15:15 GMT-0300 (Argentina Standard Time) - message: token is not defined"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:15:18 GMT-0300 (Argentina Standard Time) - message: token is not defined"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:40:05 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:40:22 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:40:35 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:41:22 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:44:17 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:44:43 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:56:53 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"data-role=\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:57:11 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"data-role=\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:57:37 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"data-role=\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 15:58:01 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"data-role=\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 16:00:35 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"data-role=admin\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 16:01:11 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"data-role=admin\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 16:01:46 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"data-role=admin\" (type string) at path \"_id\" for model \"carts\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 16:04:54 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading 'role')"}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 16:08:12 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"products\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 16:08:31 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"products\""}
+{"level":"error","message":"ERROR => date: Sun Sep 03 2023 16:09:25 GMT-0300 (Argentina Standard Time) - message: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"products\""}
+{"level":"error","message":"ERROR => date: Sun Sep 10 2023 08:45:08 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"ERROR => date: Mon Sep 11 2023 22:46:43 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"ERROR => date: Mon Sep 11 2023 22:47:57 GMT-0300 (Argentina Standard Time) - message: Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"ERROR => date: Mon Sep 11 2023 23:15:18 GMT-0300 (Argentina Standard Time) - message: One of the chosen products doesn't have stock"}

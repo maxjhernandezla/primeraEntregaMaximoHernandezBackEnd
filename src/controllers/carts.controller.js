@@ -1,5 +1,7 @@
 import * as cartsService from "../services/carts.services.js";
-import { CartNotFound, CartWithoutStock, ProductNotFound } from "../utils/custom-exceptions.js";
+import { CartNotFound, CartWithoutStock, ProductNotFound, ProductWhitoutStock } from "../utils/custom-exceptions.js";
+import { verifyToken } from "../utils/utils.js";
+import * as usersService from '../services/users.services.js'
 
 const getCarts = async (req, res) => {
   try {
@@ -32,7 +34,10 @@ const getCartById = async (req, res) => {
 const addToCart = async (req, res) => {
   try {
     const { cid, pid } = req.params;
-    const result = await cartsService.addToCart(cid, pid);
+    const cookie = req.cookies["sessionCookie"];
+    const verifiedToken = verifyToken(cookie);
+    const email = verifiedToken.user.email;
+    const result = await cartsService.addToCart(cid, pid, email);
     res.sendSuccess(result);
   } catch (error) {
     if (error instanceof CartNotFound) {
@@ -137,8 +142,11 @@ const purchase = async (req, res) => {
   try {
     const { cid } = req.params;
     const user = req.user;
-    const result = await cartsService.purchase(cid, user);
-    res.sendSuccess(result);
+    const ticket = await cartsService.purchase(cid, user);
+    if (ticket) {
+      await cartsService.closeCart(cid, user)
+    }
+    res.send({status: 'success', payload: ticket});
   } catch (error) {
     if (error instanceof CartNotFound) {
       return res.sendClientError(error.message);
@@ -146,9 +154,13 @@ const purchase = async (req, res) => {
     if (error instanceof CartWithoutStock) {
       return res.sendClientError(error.message);
     }
+    if (error instanceof ProductWhitoutStock) {
+      return res.sendClientError(error.message);
+    }
     req.logger.error(
       `ERROR => date: ${new Date()} - message: ${error.message}`
     );
+    console.log(error);
     res.sendServerError(error.message);
   }
 };

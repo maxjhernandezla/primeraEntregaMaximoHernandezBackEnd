@@ -1,13 +1,18 @@
-import { TICKETS_DAO } from "../dao/index.js";
 import { v4 as uuidv4 } from "uuid";
 import {
   noStockEmail,
   purchaseEmail,
   purchaseEmailAndNoStock,
 } from "../mailing/mailing.js";
+import { TicketNotFound } from "../utils/custom-exceptions.js";
+import TicketsRepository from '../repositories/tickets.repository.js'
+import { Tickets } from "../dao/factory.js";
+
+const ticketsDao = new Tickets()
+const ticketsRepository = new TicketsRepository(ticketsDao)
 
 const createTicket = async (purchaser, amount, productsWithoutStock) => {
-  const purchase_datetime = new Date().toISOString()
+  const purchase_datetime = new Date().toISOString();
   const code = uuidv4();
   const ticket = {
     purchaser,
@@ -22,8 +27,16 @@ const createTicket = async (purchaser, amount, productsWithoutStock) => {
   } else if (productsWithoutStock.length > 0 && amount > 0) {
     await purchaseEmailAndNoStock(ticket);
   }
-  const result = TICKETS_DAO.create(ticket);
+  const result = ticketsRepository.create(ticket);
   return result;
 };
 
-export { createTicket };
+const getTicketById = async (tid) => {
+  const result = ticketsRepository.getById(tid);
+  if (!result) {
+    throw new TicketNotFound("Ticket not found");
+  }
+  return result;
+};
+
+export { createTicket, getTicketById };

@@ -15,33 +15,33 @@ import {
 export default class CartsRouter extends Router {
   init() {
     this.get("/", ["ADMIN"], passportStrategiesEnum.JWT, getCarts);
-    this.get("/:cid", ["ADMIN", "USER"], passportStrategiesEnum.JWT, getCartById);
+    this.get("/:cid", ["ADMIN", "USER", "PREMIUM"], passportStrategiesEnum.JWT, getCartById);
     this.post(
       "/:cid/products/:pid",
-      ["USER", "ADMIN"],
+      ["USER", "ADMIN", "PREMIUM"],
       passportStrategiesEnum.JWT,
       addToCart
     );
-    this.post("/", ["USER"], passportStrategiesEnum.JWT, createCart);
-    this.put("/:cid", ["USER"], passportStrategiesEnum.JWT, updateCart);
+    this.post("/", ["USER", "PREMIUM"], passportStrategiesEnum.JWT, createCart);
+    this.put("/:cid", ["USER", "PREMIUM"], passportStrategiesEnum.JWT, updateCart);
     this.put(
       "/:cid/products/:pid",
-      ["USER"],
+      ["USER", "PREMIUM"],
       passportStrategiesEnum.JWT,
       updateQuantity
     );
     this.delete(
       "/:cid/products/:pid",
-      ["USER", "ADMIN"],
+      ["USER", "ADMIN", "PREMIUM"],
       passportStrategiesEnum.JWT,
       deleteProductInCart
     );
     this.delete(
       "/:cid",
-      ["USER", "ADMIN"],
+      ["USER", "ADMIN", "PREMIUM"],
       passportStrategiesEnum.JWT,
       deleteAllProductsInCart
     );
-    this.post("/:cid/purchase", ["USER", "ADMIN"], passportStrategiesEnum.JWT, purchase);
+    this.post("/:cid/purchase", ["USER", "ADMIN", "PREMIUM"], passportStrategiesEnum.JWT, purchase);
   }
 }

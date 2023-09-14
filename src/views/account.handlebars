@@ -1,0 +1,12 @@
+{{#if user}}
+<div>
+  <div class="userData">
+    <h1>Bienvenido {{user.name}}</h1>
+    <p>Email: {{user.email}}</p>
+    <p>Role: {{user.role}}</p>
+    <div class="logoutContainer">
+      <button class="logoutBtn">Cerrar sesión</button>
+    </div>
+  </div>
+{{/if}}
+<script src="/js/logout.js"></script>

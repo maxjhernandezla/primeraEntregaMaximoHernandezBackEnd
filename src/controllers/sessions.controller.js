@@ -6,7 +6,6 @@ import {
   verifyEmail,
   verifyToken,
 } from "../utils/utils.js";
-import UserDto from "../dao/DTOs/users.dto.js";
 import {
   UserNotFound,
   IncorrectLoginCredentials,
@@ -129,4 +128,17 @@ const resetPassword = async (req, res) => {
   }
 };
 
-export { logged, recoverPassword, resetPassword, login, register };
+const logout = async (req, res) => {
+  try {
+    res
+      .clearCookie("sessionCookie")
+      .send({ status: "success", payload: "Logout success" });
+  } catch (error) {
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
+    res.sendServerError(error.message);
+  }
+};
+
+export { logged, recoverPassword, resetPassword, login, register, logout };

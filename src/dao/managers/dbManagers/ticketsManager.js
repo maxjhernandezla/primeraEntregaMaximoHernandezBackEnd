@@ -15,4 +15,9 @@ export default class Ticket {
         const result = await ticketsModel.find()
         return result
     }
+
+    getById = async (tid) => {
+        const result = await ticketsModel.findOne({_id: tid}).lean()
+        return result;
+    }
 }

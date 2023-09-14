@@ -1,4 +1,21 @@
-admin: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJNYXggU2hvZXMiLCJyb2xlIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQG1zLmNvbSJ9LCJpYXQiOjE2ODkyNjA1MjksImV4cCI6MTY4OTM0NjkyOX0.TnfX5jhH1CbMDoGAyNethbo4szCIjxsmAmyTKaqkZ20
-user: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJNYXhpbW8gSGVybmFuZGV6Iiwicm9sZSI6InVzZXIiLCJlbWFpbCI6Im1heGltb2poZXJuYW5kZXpsYUBnbWFpbC5jb20ifSwiaWF0IjoxNjg5Mjg1NTUwLCJleHAiOjE2ODkzNzE5NTB9.aBj-a3fng9RSztY15m8aPbjiT1MJ0mwzCh8uHI3EgTA
-
-localhost:8080/api/products/mockingproducts
+{
+    "first_name": "Max",
+    "last_name": "Hernandez",
+    "email": "maximojhernandezla@gmail.com",
+    "password": "1234",
+    "role": "user",
+    "age": 29
+}
+{
+    "email": "maximojhernandezla@gmail.com",
+    "password": "1234"
+}
+{
+    "title": "Producto test 1",
+    "brand": "Test",
+    "price": 120,
+    "stock": 30,
+    "description": "Prueba",
+    "category": "Prueba",
+    "code": "AAA111"
+}

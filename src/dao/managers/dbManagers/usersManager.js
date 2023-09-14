@@ -16,6 +16,11 @@ export default class Users {
         return user
     }
 
+    getUserById = async (id) => {
+        const user = await usersModel.findOne({_id: id}).lean()
+        return user
+    }
+
     save = async (user) => {
         const result = await usersModel.create(user)
         return result
@@ -23,6 +28,11 @@ export default class Users {
 
     update = async (user) => {
         const result = await usersModel.updateOne({ _id: user._id }, user)
+        return result
+    }
+
+    deleteOldUsers = async (users) => {
+        const result = await usersModel.deleteMany({ email: { $in: users } })
         return result
     }
 }

@@ -1,0 +1,26 @@
+<a href="/">Index</a>
+<a href="/cart">Cart</a>
+<a href="/products">Products</a>
+
+{{#if user}}
+  <div class="userData">
+    <h1>Bienvenido {{user.name}}</h1>
+    <p>Email: {{user.email}}</p>
+    <p>Role: {{user.role}}</p>
+    <div class="logoutContainer">
+      <button class="logoutBtn">Cerrar sesión</button>
+    </div>
+  </div>
+{{/if}}
+<div class="generalContainer">
+  <div class="ticketContainer">
+    <div class="tFront">
+      <h3>Felicitaciones por su compra!</h3>
+    </div>
+    <div class="pData">
+      <p>El total de su compra es: ${{ticket.amount}}</p>
+      <p>Su número de ticket es: {{ticket.code}}</p>
+    </div>
+  </div>
+</div>
+<script src="/js/logout.js"></script>

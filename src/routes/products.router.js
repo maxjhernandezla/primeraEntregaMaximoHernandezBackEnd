@@ -23,30 +23,8 @@ export default class ProductsRouter extends Router {
       passportStrategiesEnum.NOTHING,
       getProductById
     );
-    this.post("/", ["ADMIN"], passportStrategiesEnum.JWT, createProduct);
-    this.put("/:pid", ["ADMIN"], passportStrategiesEnum.JWT, updateProduct);
-    this.delete("/:pid", ["ADMIN"], passportStrategiesEnum.JWT, deleteProduct);
+    this.post("/", ["ADMIN", "PREMIUM"], passportStrategiesEnum.JWT, createProduct);
+    this.put("/:pid", ["ADMIN", "PREMIUM"], passportStrategiesEnum.JWT, updateProduct);
+    this.delete("/:pid", ["ADMIN", "PREMIUM"], passportStrategiesEnum.JWT, deleteProduct);
   }
 }
-
-// const router = toAsyncExpressDecorator(Router());
-
-// router.get(
-//   "/mockingproducts",
-//   getMocksProducts
-// );
-
-// router.get(
-//   "/",
-//   getProducts
-// );
-
-// router.get(
-//   "/:pid",
-//   getProductById
-// );
-
-// router.post("/", createProduct);
-// router.put("/:pid", updateProduct);
-// router.delete("/:pid", deleteProduct);
-//export default router;

@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import config from '../config/dotenv.config.js'
+import config from "../config/dotenv.config.js";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -75,4 +75,36 @@ const recoverPasswordEmail = async (email, url) => {
   });
 };
 
-export { registerEmail, purchaseEmail, noStockEmail, purchaseEmailAndNoStock, recoverPasswordEmail };
+const deletedDueToInactivity = async (email) => {
+  await transporter.sendMail({
+    from: "Max Shoes customer service",
+    to: `${email}`,
+    subject: "Tu usuario ha sido eliminado",
+    html: `<h1>Max Shoes</h1>
+    <p>Tu usuario ha sido eliminado debido a tu inactividad.</p>
+    <p>Si quieres seguir utilizando nuestro sitio, por favor registrate de nuevo.</p>
+    <h3>Muchas gracias!</h3>`,
+  });
+};
+
+const productEliminated = async (email) => {
+  await transporter.sendMail({
+    from: "Max Shoes customer service",
+    to: `${email}`,
+    subject: "Tu producto ha sido eliminado",
+    html: `<h1>Max Shoes</h1>
+    <p>Tu producto ha sido eliminado.</p>
+    <p>Si quieres agregar un nuevo producto, por favor ingresa en nuestro sitio.</p>
+    <h3>Muchas gracias!</h3>`,
+  });
+};
+
+export {
+  registerEmail,
+  purchaseEmail,
+  noStockEmail,
+  purchaseEmailAndNoStock,
+  recoverPasswordEmail,
+  deletedDueToInactivity,
+  productEliminated
+};

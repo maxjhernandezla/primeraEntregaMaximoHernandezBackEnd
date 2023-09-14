@@ -29,6 +29,21 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "carts",
   },
+  closedCarts: {
+    type: Array,
+    default: []
+  },
+  last_connection: {
+    type: Date,
+  },
+  documents: {
+    type: [
+        {
+          name: String,
+          reference: String,
+        },
+    ],
+  },
 });
 userSchema.pre(["find", "findOne"], function () {
   this.populate("cart");

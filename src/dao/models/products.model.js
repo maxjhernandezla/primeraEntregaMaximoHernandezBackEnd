@@ -38,9 +38,9 @@ const productSchema = new mongoose.Schema({
   },
   status: Boolean,
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     require: true,
-    default: null
+    default: 'admin'
   }
 });
 

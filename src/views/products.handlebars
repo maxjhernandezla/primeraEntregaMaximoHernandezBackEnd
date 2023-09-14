@@ -1,16 +1,19 @@
 <a href="/">Index</a>
-<a href="/carts/6468f3396c3a9260d3ef7a49">Cart</a>
+<a href="/cart">Cart</a>
 <a href="/products">Products</a>
-
-
+<a href="/login">Login</a>
+<a href="/register">Register</a>
+{{#if user}}
 <div>
-  {{!-- <div class="userData">
-    <h1>Bienvenido {{user.username}}</h1>
+  <div class="userData">
+    <h1>Bienvenido {{user.name}}</h1>
     <p>Email: {{user.email}}</p>
-    <p>Age: {{user.age}}</p>
     <p>Role: {{user.role}}</p>
-    <a href="/api/sessions/logout"><button>Cerrar sesión</button></a>
-  </div> --}}
+    <div class="logoutContainer">
+      <button class="logoutBtn">Cerrar sesión</button>
+    </div>
+  </div>
+{{/if}}
   <div class="generalContainer">
     {{#each products}}
       <div class="productContainer">
@@ -24,9 +27,8 @@
           <p>Price: {{this.price}}</p>
           <p>Stock: {{this.stock}}</p>
         </div>
-        <div class="bnContainer">
-          <a href="/products/{{this._id}}">Product detail</a>
-          <button class="addBtn" data-id={{this._id}}>Add to cart</button>
+        <div class="btnContainer">
+          <button class="addBtn" data-role="{{role}}" data-pid="{{this._id}}" data-cartId="{{cartId}}">Add to cart</button>
         </div>
       </div>
     {{/each}}
@@ -38,3 +40,4 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js
 "
 ></script>
 <script src="/js/addToCart.js"></script>
+<script src="/js/logout.js"></script>

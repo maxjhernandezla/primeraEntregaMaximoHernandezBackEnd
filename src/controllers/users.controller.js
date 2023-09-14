@@ -1,11 +1,5 @@
-import { config } from "dotenv";
 import * as usersService from "../services/users.services.js";
-import {
-  IncorrectLoginCredentials,
-  UserAlreadyExists,
-  UserNotFound,
-} from "../utils/custom-exceptions.js";
-
+import { EmptyDocuments, UserNotFound } from "../utils/custom-exceptions.js";
 
 const getUserByEmail = async (req, res) => {
   try {
@@ -35,47 +29,59 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-export { getUserByEmail, getAllUsers };
+const premium = async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const user = await usersService.getUserById(uid);
+    const accessToken = await usersService.premium(user);
+    res.cookie("sessionCookie", accessToken, {
+      maxAge: 60 * 60 * 1000,
+      httpOnly: true,
+    });
+    res.sendSuccess({ accessToken });
+  } catch (error) {
+    if (error instanceof UserNotFound) {
+      res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
+    res.sendServerError(error.message);
+  }
+};
 
-// const login = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-//     const user = await getUserByEmailService(email);
-//     if (!user) return res.sendClientError("incorrect credentials");
-//     const comparePassword = isValidPassword(user, password);
-//     if (!comparePassword) return res.sendClientError("incorrect credentials");
-//     const dtoUser = new UserDto(user);
-//     const accessToken = generateToken(dtoUser);
-//     req.logger.info(`INFO => date: ${new Date()} - message: ${user.email} logged in`);
-//     res.sendSuccess({ accessToken });
-//   } catch (error) {
-//     req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
-//     res.sendServerError(error.message);
-//   }
-// };
+const uploadDocuments = async (req, res) => {
+  try {
+    const { type } = req.headers;
+    const { uid } = req.params;
+    const { files } = req;
+    const result = await usersService.uploadDocuments(uid, files, type);
+    res.sendSuccess(result);
+  } catch (error) {
+    if (error instanceof UserNotFound) {
+      res.sendClientError(error.message);
+    }
+    if (error instanceof EmptyDocuments) {
+      res.sendClientError(error.message);
+    }
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
+    res.sendServerError(error.message);
+  }
+};
 
-// const register = async (req, res) => {
-//   try {
-//     const { first_name, last_name, email, age, password, role } = req.body;
-//     if (!first_name || !last_name || !email || !age || !password || !role)
-//       return res.sendClientError("incomplete credentials");
-//     const exists = await usersService.getUserByEmailRegister(email);
-//     if (exists) return res.sendClientError("user already exists");
-//     const hashedPassword = createHash(password);
-//     const newUser = { ...req.body };
-//     newUser.password = hashedPassword;
-//     if (role === "user") {
-//       const cart = await createCartService();
-//       newUser.cart = cart;
-//     }
-//     const result = await createUserService(newUser);
-//     if (result) {
-//       await registerEmail(newUser)
-//     }
-//     req.logger.info(`INFO => date: ${new Date()} - message: new user registered`);
-//     res.sendSuccess(result);
-//   } catch (error) {
-//     req.logger.error(`ERROR => date: ${new Date()} - message: ${error.message}`);
-//     res.sendServerError(error.message);
-//   }
-// };
+const deleteOldUsers = async (req, res) => {
+  try {
+    const users = await usersService.getAllUsers();
+    const result = await usersService.deleteOldUsers(users)
+    res.sendSuccess(result)
+  } catch (error) {
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
+    res.sendServerError(error.message);
+  }
+}
+
+export { getUserByEmail, getAllUsers, premium, uploadDocuments, deleteOldUsers };

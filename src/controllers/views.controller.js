@@ -1,29 +1,58 @@
 import { getCartById as getCartByIdService } from "../services/carts.services.js";
-import {
-  getProducts as getProductsService,
-  getProductById as getProductByIdService,
-} from "../services/products.services.js";
+import * as productsService from "../services/products.services.js";
+import * as ticketsService from "../services/tickets.service.js";
+import * as usersService from "../services/users.services.js";
+import { verifyToken } from "../utils/utils.js";
+import * as cartsService from "../services/carts.services.js";
 
-const getProducts = async (req, res) => {
-  const { limit, page, sort, category, status } = req.query;
+const products = async (req, res) => {
   try {
-    const { docs } = await getProductsService({
+    const { limit, page, sort, category, status } = req.query;
+    let products = [];
+    let token;
+    const cookie = req.cookies["sessionCookie"];
+    let cartId; // Declarar cartId fuera del bloque if
+    let userByEmail;
+
+    if (cookie) {
+      token = verifyToken(cookie);
+      userByEmail = await usersService.getUserByEmail(token.user.email);
+      if (userByEmail.role !== "admin") {
+        cartId = userByEmail.cart._id.toString();
+      }
+    }
+
+    const { docs } = await productsService.getProducts({
       limit,
       page,
       sort,
       category,
       status,
     });
-    res.render("products", { products: docs, user: req.session.user });
+
+    if (cartId) {
+      products = docs.map((product) => ({ ...product, cartId }));
+    } else {
+      products = docs;
+      products = docs.map((product) => ({
+        ...product,
+        role: userByEmail?.role,
+      }));
+    }
+
+    res.render("products", { products, user: token?.user });
   } catch (error) {
+    req.logger.error(
+      `ERROR => date: ${new Date()} - message: ${error.message}`
+    );
     res.sendServerError(error.message);
   }
 };
 
 const getProductById = async (req, res) => {
-  const { pid } = req.params;
   try {
-    const product = await getProductByIdService(pid);
+    const { pid } = req.params;
+    const product = await productsService.getProductById(pid);
     res.render("product", { product });
   } catch (error) {
     res.status(500).send({ error: "error", error });
@@ -31,12 +60,15 @@ const getProductById = async (req, res) => {
 };
 
 const getCartById = async (req, res) => {
-  const { cid } = req.params;
   try {
-    const { products } = await getCartByIdService(cid);
-    res.render("carts", { products });
+    const user = req?.user;
+    const userByEmail = await usersService.getUserByEmail(user.email);
+    const cartId = userByEmail.cart._id.toString();
+    const { products } = await cartsService.getCartById(cartId);
+    const productsWithCartId = products.map((p) => ({ ...p, cartId }));
+    res.render("carts", { products: productsWithCartId, cartId });
   } catch (error) {
-    res.status(500).send({ error: "error", error });
+    res.status(500).send({ error: error.message });
   }
 };
 
@@ -52,12 +84,58 @@ const register = async (req, res) => {
   res.render("register");
 };
 
+const logout = async (req, res) => {
+  res.render("logout");
+};
+
 const resetPassword = async (req, res) => {
   res.render("resetPassword");
 };
 
 const recoverPassword = async (req, res) => {
-  res.render("recoverPassword")
-}
+  res.render("recoverPassword");
+};
 
-export { getProducts, getProductById, getCartById, login, register, resetPassword, recoverPassword };
+const index = async (req, res) => {
+  res.render("index");
+};
+
+const admin = async (req, res) => {
+  const users = await usersService.getAllUsers();
+  res.render("admin", { users });
+};
+
+const purchase = async (req, res) => {
+  try {
+    const { tid } = req.params;
+    const user = req?.user;
+    const ticket = await ticketsService.getTicketById(tid);
+    res.render("purchase", { ticket, user });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+const account = async (req, res) => {
+  try {
+    const user = req.user;
+    res.render("account", { user });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+export {
+  products,
+  getProductById,
+  getCartById,
+  login,
+  register,
+  resetPassword,
+  recoverPassword,
+  index,
+  admin,
+  purchase,
+  logout,
+  account
+};

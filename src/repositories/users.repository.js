@@ -17,4 +17,12 @@ export default class UsersRepository {
   update = async (user) => {
     return await this.dao.update(user)
   }
+
+  getUserById = async (uid) => {
+    return await this.dao.getUserById(uid)
+  }
+
+  deleteOldUsers = async (users) => {
+    return await this.dao.deleteOldUsers(users)
+  }
 }
