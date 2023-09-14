@@ -13,7 +13,7 @@ const usersRepository = new UsersRepository(usersDAO);
 const recoverPassword = async (user) => {
     const userDto = new UserDto(user)
     const token = recoverPasswordToken(userDto)
-    const url = `http://localhost:8080/resetpassword/${user._id}`
+    const url = process.env.PORT == 8080 ? `http://localhost:8080/resetpassword/${user._id}` : `https://proyectomaximohernandezbackend-production.up.railway.app/resetpassword/${user._id}`
     recoverPasswordEmail(user.email, url)
     return token
 }
