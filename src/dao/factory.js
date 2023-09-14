@@ -6,12 +6,12 @@ export let Carts;
 export let Tickets;
 export let Messages;
 
-const persistence = config.persistence;
+const persistence = process.env.PERSISTENCE;
 
 switch (persistence) {
   case "MONGO":
     const mongoose = await import("mongoose");
-    await mongoose.connect(config.mongoUrl);
+    await mongoose.connect(process.env.MONGO_URL);
     const { default: UsersMongo } = await import(
       "./managers/dbManagers/usersManager.js"
     );

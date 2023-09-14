@@ -6,7 +6,7 @@ import config from './dotenv.config.js'
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
-const PRIVATE_KEY = config.privateKey;
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 const cookieExtractor = (req) => {
   let token = null;

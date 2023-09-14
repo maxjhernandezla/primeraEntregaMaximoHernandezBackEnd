@@ -6,7 +6,7 @@ const expect = chai.expect;
 const requester = supertest("http://localhost:8080");
 
 try {
-  await mongoose.connect(config.mongoUrl);
+  await mongoose.connect(process.env.MONGO_URL);
 } catch (error) {
   console.log(error);
 }

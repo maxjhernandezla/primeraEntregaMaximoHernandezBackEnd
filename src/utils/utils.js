@@ -15,12 +15,12 @@ const isValidPassword = (user, password) =>
   bcrypt.compareSync(password, user.password);
 
 const generateToken = (user) => {
-  const token = jwt.sign({ user }, config.privateKey, { expiresIn: "24h" });
+  const token = jwt.sign({ user }, process.env.PRIVATE_KEY, { expiresIn: "24h" });
   return token;
 };
 
 const recoverPasswordToken = (user) => {
-  const token = jwt.sign({ user }, config.privateKey, { expiresIn: "1h" });
+  const token = jwt.sign({ user }, process.env.PRIVATE_KEY, { expiresIn: "1h" });
   return token;
 };
 
@@ -40,7 +40,7 @@ const generateMockProduct = () => {
 const verifyToken = (token) => {
   const verifiedToken = jwt.verify(
     token,
-    config.privateKey,
+    process.env.PRIVATE_KEY,
     (error, decoded) => {
       if (error) {
         throw new ExpiredJWT(
