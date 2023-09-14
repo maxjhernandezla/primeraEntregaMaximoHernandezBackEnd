@@ -90,7 +90,7 @@ app.use("/api/mock", mockRouter.getRouter());
 
 app.use(errorHandler);
 
-app.listen(config.port, () => logger.info(`Server running on port: ${config.port}`));
+app.listen(process.env.PORT, () => logger.info(`Server running on port: ${process.env.PORT}`));
 
 // const productManager = new ProductManager();
 // const messageManager = new MessageManager();
